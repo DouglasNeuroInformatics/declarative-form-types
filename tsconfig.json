@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": false,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "module": "Node16",
+    "moduleDetection": "force",
+    "moduleResolution": "Node16",
+    "noEmit": true,
+    "skipLibCheck": false,
+    "strict": true,
+    "target": "ESNext",
+    "verbatimModuleSyntax": true
+  },
+  "include": ["lib/**/*"]
+}

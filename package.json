@@ -1,0 +1,47 @@
+{
+  "name": "@douglasneuroinformatics/declarative-form-types",
+  "type": "module",
+  "version": "0.0.1",
+  "packageManager": "pnpm@8.15.3",
+  "author": {
+    "name": "Douglas Neuroinformatics",
+    "email": "support@douglasneuroinformatics.ca"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/DouglasNeuroInformatics/declarative-form-types/#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DouglasNeuroInformatics/declarative-form-types/.git"
+  },
+  "bugs": {
+    "url": "https://github.com/DouglasNeuroInformatics/declarative-form-types/issues"
+  },
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "build:docs": "typedoc",
+    "format": "prettier --write lib",
+    "lint": "tsc --noEmit && eslint --fix lib",
+    "prepare": "husky"
+  },
+  "peerDependencies": {
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "type-fest": "^4.6.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.1.0",
+    "@commitlint/config-conventional": "^19.1.0",
+    "@commitlint/types": "^19.0.3",
+    "@douglasneuroinformatics/eslint-config": "^4.1.1",
+    "eslint": "^8.57.0",
+    "husky": "^9.0.11",
+    "prettier": "^3.2.5",
+    "tsd": "^0.30.7",
+    "typedoc": "^0.25.12",
+    "typescript": "~5.3.3"
+  }
+}
