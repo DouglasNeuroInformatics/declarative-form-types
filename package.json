@@ -3,6 +3,7 @@
   "type": "module",
   "version": "0.0.1",
   "packageManager": "pnpm@8.15.3",
+  "description": "Type declarations for the declarative form component in libui",
   "author": {
     "name": "Douglas Neuroinformatics",
     "email": "support@douglasneuroinformatics.ca"
