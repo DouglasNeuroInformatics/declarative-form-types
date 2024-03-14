@@ -15,6 +15,6 @@ export default {
     ],
     '@semantic-release/github'
   ],
-  repositoryUrl: 'https://github.com/DouglasNeuroInformatics/declarative-form-types.git',
+  repositoryUrl: 'https://github.com/DouglasNeuroInformatics/libui-form-types.git',
   tagFormat: 'v${version}'
 };

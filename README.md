@@ -1,29 +1,29 @@
 <!-- PROJECT LOGO -->
 <div align="center">
-  <a href="https://github.com/DouglasNeuroInformatics/declarative-form-types">
-    <img src="https://raw.githubusercontent.com/DouglasNeuroInformatics/declarative-form-types/main/.github/assets/libui-logo.svg" alt="Logo" width="100" >
+  <a href="https://github.com/DouglasNeuroInformatics/libui-form-types">
+    <img src="https://raw.githubusercontent.com/DouglasNeuroInformatics/libui-form-types/main/.github/assets/libui-logo.svg" alt="Logo" width="100" >
   </a>
-  <h3 align="center">@douglasneuroinformatics/declarative-form-types</h3>
+  <h3 align="center">@douglasneuroinformatics/libui-form-types</h3>
   <p align="center">
-    Type declarations for a declarative form 
+    Type declarations for a libui form 
     <br />
-    <a href="https://douglasneuroinformatics.github.io/declarative-form-types/">
+    <a href="https://douglasneuroinformatics.github.io/libui-form-types/">
       <strong>Explore the docs »
       </strong>
     </a>
     <br />
     <br />
-    <a href="https://github.com/DouglasNeuroInformatics/declarative-form-types/issues" rel="noreferrer" target="_blank">Report Bug</a>
+    <a href="https://github.com/DouglasNeuroInformatics/libui-form-types/issues" rel="noreferrer" target="_blank">Report Bug</a>
     ·
-    <a href="https://github.com/DouglasNeuroInformatics/declarative-form-types/issues" rel="noreferrer" target="_blank">Request Feature</a>
+    <a href="https://github.com/DouglasNeuroInformatics/libui-form-types/issues" rel="noreferrer" target="_blank">Request Feature</a>
   </p>
 </div>
 
 <!-- PROJECT SHIELDS -->
 <div align="center">
 
-![license](https://img.shields.io/github/license/DouglasNeuroInformatics/declarative-form-types)
-![version](https://img.shields.io/github/package-json/v/DouglasNeuroInformatics/declarative-form-types)
+![license](https://img.shields.io/github/license/DouglasNeuroInformatics/libui-form-types)
+![version](https://img.shields.io/github/package-json/v/DouglasNeuroInformatics/libui-form-types)
 
 </div>
 <hr />
@@ -35,7 +35,7 @@ This repository contains type declarations for the `Form` component implemented 
 ## Installation
 
 ```sh
-pnpm install @douglasneuroinformatics/declarative-form-types
+pnpm install @douglasneuroinformatics/libui-form-types
 ```
 
 ## Contributing

@@ -1,5 +1,5 @@
 {
-  "name": "@douglasneuroinformatics/declarative-form-types",
+  "name": "@douglasneuroinformatics/libui-form-types",
   "type": "module",
   "version": "0.0.1",
   "packageManager": "pnpm@8.15.3",
@@ -8,13 +8,13 @@
     "email": "support@douglasneuroinformatics.ca"
   },
   "license": "MIT",
-  "homepage": "https://github.com/DouglasNeuroInformatics/declarative-form-types/#readme",
+  "homepage": "https://github.com/DouglasNeuroInformatics/libui-form-types/#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/DouglasNeuroInformatics/declarative-form-types/.git"
+    "url": "git+https://github.com/DouglasNeuroInformatics/libui-form-types/.git"
   },
   "bugs": {
-    "url": "https://github.com/DouglasNeuroInformatics/declarative-form-types/issues"
+    "url": "https://github.com/DouglasNeuroInformatics/libui-form-types/issues"
   },
   "types": "lib/index.d.ts",
   "files": [
