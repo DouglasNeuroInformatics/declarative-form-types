@@ -1,7 +1,7 @@
 import type { Simplify } from 'type-fest';
 
 /** Discriminator key to determine the structure of a specific form field */
-export type FormFieldKind = 'array' | 'binary' | 'date' | 'numeric' | 'options' | 'text';
+export type FormFieldKind = 'array' | 'boolean' | 'date' | 'numeric' | 'options' | 'text';
 
 // BASE DATA TYPES
 
@@ -123,9 +123,9 @@ export type DateFormField = FormFieldMixin<{
   kind: 'date';
 }>;
 
-export type BinaryFormField = FormFieldMixin<
+export type BooleanFormField = FormFieldMixin<
   | {
-      kind: 'binary';
+      kind: 'boolean';
       options?: {
         f: string;
         t: string;
@@ -133,7 +133,7 @@ export type BinaryFormField = FormFieldMixin<
       variant: 'radio';
     }
   | {
-      kind: 'binary';
+      kind: 'boolean';
       variant: 'checkbox';
     }
 >;
@@ -147,8 +147,8 @@ export type PrimitiveFormField<TValue extends RequiredPrimitiveFieldValue = Requ
       : TValue extends number
         ? NumericFormField
         : TValue extends boolean
-          ? BinaryFormField
-          : BinaryFormField | DateFormField | NumericFormField | OptionsFormField;
+          ? BooleanFormField
+          : BooleanFormField | DateFormField | NumericFormField | OptionsFormField;
 
 export type DynamicFieldsetField<T extends ArrayFieldsetValue, TValue extends RequiredPrimitiveFieldValue> = {
   kind: 'dynamic-fieldset';
