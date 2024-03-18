@@ -1,7 +1,7 @@
 {
   "name": "@douglasneuroinformatics/libui-form-types",
   "type": "module",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "packageManager": "pnpm@8.15.3",
   "description": "Type declarations for the declarative form component in libui",
   "author": {
@@ -22,10 +22,12 @@
     "lib"
   ],
   "scripts": {
-    "build:docs": "typedoc",
+    "docs:build": "typedoc",
+    "docs:dev": "concurrently \"typedoc --watch\" \"http-server ./docs\"",
     "format": "prettier --write lib",
     "lint": "tsc --noEmit && eslint --fix lib",
-    "prepare": "husky"
+    "prepare": "husky",
+    "test": "tsd"
   },
   "peerDependencies": {
     "typescript": "^5.3.3"
@@ -39,8 +41,12 @@
     "@commitlint/types": "^19.0.3",
     "@douglasneuroinformatics/eslint-config": "^4.1.1",
     "@semantic-release/git": "^10.0.1",
+    "@types/lodash": "^4.17.0",
+    "concurrently": "^8.2.2",
     "eslint": "^8.57.0",
+    "http-server": "^14.1.1",
     "husky": "^9.0.11",
+    "lodash": "^4.17.21",
     "prettier": "^3.2.5",
     "semantic-release": "^23.0.2",
     "tsd": "^0.30.7",

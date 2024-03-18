@@ -1,5 +1,7 @@
 #!/usr/bin/env sh
 
+pnpm test
+
 FILES=$(git diff --cached --name-only --diff-filter=ACMR | sed 's| |\\ |g')
 [ -z "$FILES" ] && exit 0
 

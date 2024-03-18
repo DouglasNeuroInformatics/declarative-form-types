@@ -1,53 +1,52 @@
 import type { Simplify } from 'type-fest';
 
 /** Discriminator key to determine the structure of a specific form field */
-export type FormFieldKind = 'array' | 'binary' | 'date' | 'numeric' | 'options' | 'text';
+export type StaticFormFieldKind = 'boolean' | 'composite' | 'date' | 'number' | 'set' | 'string';
 
 // BASE DATA TYPES
 
-export type PrimitiveFieldValue = Date | boolean | number | string | undefined;
+export type ScalarFieldValue = Date | Set<string> | boolean | number | string | undefined;
 
-export type ArrayFieldsetValue = Record<string, PrimitiveFieldValue>;
+export type CompositeFieldsetValue = Record<string, ScalarFieldValue>;
 
-export type ArrayFieldValue = ArrayFieldsetValue[] | undefined;
+export type CompositeFieldValue = CompositeFieldsetValue[] | undefined;
 
-export type FormFieldValue = ArrayFieldValue | PrimitiveFieldValue;
+export type FormFieldValue = CompositeFieldValue | ScalarFieldValue;
 
 /** The type of the data associated with the entire instrument (i.e., the values for all fields) */
 export type FormDataType = Record<string, FormFieldValue>;
 
 // REQUIRED DATA TYPES
 
-export type RequiredPrimitiveFieldValue<T extends PrimitiveFieldValue = PrimitiveFieldValue> = NonNullable<T>;
+export type RequiredScalarFieldValue<T extends ScalarFieldValue = ScalarFieldValue> = NonNullable<T>;
 
-export type RequiredArrayFieldsetValue<T extends ArrayFieldsetValue = ArrayFieldsetValue> = {
-  [K in keyof T]: RequiredPrimitiveFieldValue<T[K]>;
+export type RequiredCompositeFieldsetValue<T extends CompositeFieldsetValue = CompositeFieldsetValue> = {
+  [K in keyof T]: RequiredScalarFieldValue<T[K]>;
 };
 
-export type RequiredArrayFieldValue<T extends ArrayFieldValue = ArrayFieldValue> = RequiredArrayFieldsetValue<
-  NonNullable<T>[number]
->[];
+export type RequiredCompositeFieldValue<T extends CompositeFieldValue = CompositeFieldValue> =
+  RequiredCompositeFieldsetValue<NonNullable<T>[number]>[];
 
 export type RequiredFormFieldValue<T extends FormFieldValue = FormFieldValue> =
-  T extends NonNullable<PrimitiveFieldValue>
-    ? RequiredPrimitiveFieldValue<T>
-    : T extends NonNullable<ArrayFieldValue>
-      ? RequiredArrayFieldValue
+  T extends NonNullable<ScalarFieldValue>
+    ? RequiredScalarFieldValue<T>
+    : T extends NonNullable<CompositeFieldValue>
+      ? RequiredCompositeFieldValue
       : T;
 
 export type RequiredFormDataType<T extends FormDataType = FormDataType> = {
-  [K in keyof T]-?: NonNullable<T[K]> extends (infer U extends ArrayFieldsetValue)[]
+  [K in keyof T]-?: NonNullable<T[K]> extends (infer U extends CompositeFieldsetValue)[]
     ? {
-        [P in keyof U]-?: NonNullable<U[P]> extends RequiredPrimitiveFieldValue ? NonNullable<U[P]> : never;
+        [P in keyof U]-?: NonNullable<U[P]> extends RequiredScalarFieldValue ? NonNullable<U[P]> : never;
       }[]
-    : NonNullable<T[K]> extends RequiredPrimitiveFieldValue
+    : NonNullable<T[K]> extends RequiredScalarFieldValue
       ? NonNullable<T[K]>
-      : RequiredArrayFieldValue | RequiredPrimitiveFieldValue;
+      : RequiredCompositeFieldValue | RequiredScalarFieldValue;
 };
 
 /** The `FormDataType` with all `FormFieldValues` set to be optional */
 export type PartialFormDataType<T extends FormDataType = FormDataType> = {
-  [K in keyof T]?: NonNullable<T[K]> extends (infer U extends ArrayFieldsetValue)[]
+  [K in keyof T]?: NonNullable<T[K]> extends (infer U extends CompositeFieldsetValue)[]
     ?
         | {
             [P in keyof U]?: U[P];
@@ -59,7 +58,7 @@ export type PartialFormDataType<T extends FormDataType = FormDataType> = {
 };
 
 export type PartialNullableFormDataType<T extends FormDataType = FormDataType> = {
-  [K in keyof T]?: NonNullable<T[K]> extends (infer U extends ArrayFieldsetValue)[]
+  [K in keyof T]?: NonNullable<T[K]> extends (infer U extends CompositeFieldsetValue)[]
     ?
         | {
             [P in keyof U]?: U[P] | null | undefined;
@@ -77,7 +76,7 @@ export type BaseFormField = {
   description?: string;
 
   /** Discriminator key */
-  kind: FormFieldKind;
+  kind: StaticFormFieldKind;
 
   /** The label to be displayed to the user */
   label: string;
@@ -88,44 +87,47 @@ export type BaseFormField = {
  * the data type stored in the form and variant determines what will be rendered
  * to the user, if applicable
  */
-export type FormFieldMixin<T extends { kind: FormFieldKind }> = Simplify<BaseFormField & T>;
+export type FormFieldMixin<T extends { kind: StaticFormFieldKind }> = Simplify<BaseFormField & T>;
 
-export type TextFormField = FormFieldMixin<{
-  kind: 'text';
-  variant: 'long' | 'password' | 'short';
-}>;
-
-export type NumericFormField = FormFieldMixin<
+export type TextFormField<TValue extends string = string> = FormFieldMixin<
   | {
-      kind: 'numeric';
+      kind: 'string';
+      options: Record<TValue, string>;
+      variant: 'select';
+    }
+  | {
+      kind: 'string';
+      variant: 'input' | 'password' | 'textarea';
+    }
+>;
+
+export type NumberFormField<TValue extends number = number> = FormFieldMixin<
+  | {
+      kind: 'number';
       max: number;
       min: number;
       variant: 'slider';
     }
   | {
-      kind: 'numeric';
+      kind: 'number';
       max?: number;
       min?: number;
-      variant: 'default';
+      variant: 'input';
+    }
+  | {
+      kind: 'number';
+      options: Record<TValue, string>;
+      variant: 'radio';
     }
 >;
-
-/**
- * Here, TValue is a string and options is a map of the actual values (i.e., what will be sent to backend)
- * to the labels. Thus, only one key will be sent to the backend.
- */
-export type OptionsFormField<TValue extends string = string> = FormFieldMixin<{
-  kind: 'options';
-  options: Record<TValue, string>;
-}>;
 
 export type DateFormField = FormFieldMixin<{
   kind: 'date';
 }>;
 
-export type BinaryFormField = FormFieldMixin<
+export type BooleanFormField = FormFieldMixin<
   | {
-      kind: 'binary';
+      kind: 'boolean';
       options?: {
         f: string;
         t: string;
@@ -133,42 +135,51 @@ export type BinaryFormField = FormFieldMixin<
       variant: 'radio';
     }
   | {
-      kind: 'binary';
+      kind: 'boolean';
       variant: 'checkbox';
     }
 >;
 
-/** A field where the underlying value of the field data is of type FormFieldValue */
-export type PrimitiveFormField<TValue extends RequiredPrimitiveFieldValue = RequiredPrimitiveFieldValue> =
-  TValue extends Date
-    ? DateFormField
-    : TValue extends string
-      ? OptionsFormField<TValue> | TextFormField
-      : TValue extends number
-        ? NumericFormField
-        : TValue extends boolean
-          ? BinaryFormField
-          : BinaryFormField | DateFormField | NumericFormField | OptionsFormField;
-
-export type DynamicFieldsetField<T extends ArrayFieldsetValue, TValue extends RequiredPrimitiveFieldValue> = {
-  kind: 'dynamic-fieldset';
-  render: (fieldset: Partial<T>) => PrimitiveFormField<TValue> | null;
-};
-
-export type ArrayFieldset<T extends RequiredArrayFieldsetValue> = {
-  [K in keyof T]: DynamicFieldsetField<T, T[K]> | PrimitiveFormField<T[K]>;
-};
-
-export type ArrayFormField<TValue extends RequiredArrayFieldValue = RequiredArrayFieldValue> = FormFieldMixin<{
-  fieldset: ArrayFieldset<TValue[number]>;
-  kind: 'array';
+export type SetFormField<TValue extends Set<string> = Set<string>> = FormFieldMixin<{
+  kind: 'set';
+  options: Record<TValue extends Set<infer TItem extends string> ? TItem : never, string>;
 }>;
 
-export type StaticFormField<TValue extends RequiredFormFieldValue> = TValue extends RequiredPrimitiveFieldValue
-  ? PrimitiveFormField<TValue>
-  : TValue extends RequiredArrayFieldValue
-    ? ArrayFormField<TValue>
-    : ArrayFormField | PrimitiveFormField;
+/** A field where the underlying value of the field data is of type FormFieldValue */
+export type ScalarFormField<TValue extends RequiredScalarFieldValue = RequiredScalarFieldValue> = TValue extends object
+  ? TValue extends Date
+    ? DateFormField
+    : TValue extends Set<string>
+      ? SetFormField<TValue>
+      : never
+  : TValue extends string
+    ? TextFormField<TValue>
+    : TValue extends number
+      ? NumberFormField<TValue>
+      : TValue extends boolean
+        ? BooleanFormField
+        : never;
+
+export type DynamicFieldsetField<T extends CompositeFieldsetValue, TValue extends RequiredScalarFieldValue> = {
+  kind: 'dynamic';
+  render: (fieldset: Partial<T>) => ScalarFormField<TValue> | null;
+};
+
+export type CompositeFieldset<T extends RequiredCompositeFieldsetValue> = {
+  [K in keyof T]: DynamicFieldsetField<T, T[K]> | ScalarFormField<T[K]>;
+};
+
+export type CompositeFormField<TValue extends RequiredCompositeFieldValue = RequiredCompositeFieldValue> =
+  FormFieldMixin<{
+    fieldset: CompositeFieldset<TValue[number]>;
+    kind: 'composite';
+  }>;
+
+export type StaticFormField<TValue extends RequiredFormFieldValue> = TValue extends RequiredScalarFieldValue
+  ? ScalarFormField<TValue>
+  : TValue extends RequiredCompositeFieldValue
+    ? CompositeFormField<TValue>
+    : CompositeFormField | ScalarFormField;
 
 export type StaticFormFields<
   TData extends FormDataType,
