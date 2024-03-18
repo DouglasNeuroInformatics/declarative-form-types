@@ -1,7 +1,7 @@
 import type { Simplify } from 'type-fest';
 
 /** Discriminator key to determine the structure of a specific form field */
-export type FormFieldKind = 'array' | 'boolean' | 'date' | 'numeric' | 'options' | 'text';
+export type FormFieldKind = 'array' | 'boolean' | 'date' | 'enum' | 'numeric' | 'text';
 
 // BASE DATA TYPES
 
@@ -114,8 +114,8 @@ export type NumericFormField = FormFieldMixin<
  * Here, TValue is a string and options is a map of the actual values (i.e., what will be sent to backend)
  * to the labels. Thus, only one key will be sent to the backend.
  */
-export type OptionsFormField<TValue extends string = string> = FormFieldMixin<{
-  kind: 'options';
+export type EnumFormField<TValue extends string = string> = FormFieldMixin<{
+  kind: 'enum';
   options: Record<TValue, string>;
 }>;
 
@@ -143,12 +143,12 @@ export type PrimitiveFormField<TValue extends RequiredPrimitiveFieldValue = Requ
   TValue extends Date
     ? DateFormField
     : TValue extends string
-      ? OptionsFormField<TValue> | TextFormField
+      ? EnumFormField<TValue> | TextFormField
       : TValue extends number
         ? NumericFormField
         : TValue extends boolean
           ? BooleanFormField
-          : BooleanFormField | DateFormField | NumericFormField | OptionsFormField;
+          : BooleanFormField | DateFormField | EnumFormField | NumericFormField;
 
 export type DynamicFieldsetField<T extends ArrayFieldsetValue, TValue extends RequiredPrimitiveFieldValue> = {
   kind: 'dynamic-fieldset';
