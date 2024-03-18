@@ -9,7 +9,7 @@ type MockFormData = {
   composite: {
     compositeItem: any;
   }[];
-  numberDefault: number;
+  numberInput: number;
   numberSlider: number;
   set: Set<'a' | 'b' | 'c'>;
   stringLong: string;
@@ -40,10 +40,10 @@ const mockFormFields: FormFields<MockFormData> = {
     kind: 'composite',
     label: 'Are the types working correctly?'
   },
-  numberDefault: {
+  numberInput: {
     kind: 'number',
     label: 'Are the types working correctly?',
-    variant: 'default'
+    variant: 'input'
   },
   numberSlider: {
     kind: 'number',
@@ -97,7 +97,7 @@ const mockFormFieldsGroup: FormFieldsGroup<MockFormData> = {
 expectType<'boolean' | 'dynamic'>(mockFormFields.booleanCheckbox.kind);
 expectType<'boolean' | 'dynamic'>(mockFormFields.booleanRadio.kind);
 expectType<'composite' | 'dynamic'>(mockFormFields.composite.kind);
-expectType<'dynamic' | 'number'>(mockFormFields.numberDefault.kind);
+expectType<'dynamic' | 'number'>(mockFormFields.numberInput.kind);
 expectType<'dynamic' | 'number'>(mockFormFields.numberSlider.kind);
 expectType<'dynamic' | 'set'>(mockFormFields.set.kind);
 expectType<'dynamic' | 'string'>(mockFormFields.stringLong.kind);
@@ -108,7 +108,7 @@ expectType<'dynamic' | 'string'>(mockFormFields.stringShort.kind);
 expectAssignable<UnknownFormField>(mockFormFields.booleanCheckbox);
 expectAssignable<UnknownFormField>(mockFormFields.booleanRadio);
 expectAssignable<UnknownFormField>(mockFormFields.stringSelect);
-expectAssignable<UnknownFormField>(mockFormFields.numberDefault);
+expectAssignable<UnknownFormField>(mockFormFields.numberInput);
 expectAssignable<UnknownFormField>(mockFormFields.numberSlider);
 expectAssignable<UnknownFormField>(mockFormFields.set);
 expectAssignable<UnknownFormField>(mockFormFields.stringLong);

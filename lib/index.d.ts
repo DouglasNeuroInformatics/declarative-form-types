@@ -112,7 +112,7 @@ export type NumberFormField = FormFieldMixin<
       kind: 'number';
       max?: number;
       min?: number;
-      variant: 'default';
+      variant: 'input';
     }
 >;
 
