@@ -1,7 +1,7 @@
 import type { Simplify } from 'type-fest';
 
 /** Discriminator key to determine the structure of a specific form field */
-export type StaticFormFieldKind = 'boolean' | 'composite' | 'date' | 'enum' | 'number' | 'set' | 'text';
+export type StaticFormFieldKind = 'boolean' | 'composite' | 'date' | 'number' | 'set' | 'string';
 
 // BASE DATA TYPES
 
@@ -89,10 +89,17 @@ export type BaseFormField = {
  */
 export type FormFieldMixin<T extends { kind: StaticFormFieldKind }> = Simplify<BaseFormField & T>;
 
-export type TextFormField = FormFieldMixin<{
-  kind: 'text';
-  variant: 'long' | 'password' | 'short';
-}>;
+export type TextFormField<TValue extends string = string> = FormFieldMixin<
+  | {
+      kind: 'string';
+      options: Record<TValue, string>;
+      variant: 'select';
+    }
+  | {
+      kind: 'string';
+      variant: 'long' | 'password' | 'short';
+    }
+>;
 
 export type NumberFormField = FormFieldMixin<
   | {
@@ -108,15 +115,6 @@ export type NumberFormField = FormFieldMixin<
       variant: 'default';
     }
 >;
-
-/**
- * Here, TValue is a string and options is a map of the actual values (i.e., what will be sent to backend)
- * to the labels. Thus, only one key will be sent to the backend.
- */
-export type EnumFormField<TValue extends string = string> = FormFieldMixin<{
-  kind: 'enum';
-  options: Record<TValue, string>;
-}>;
 
 export type DateFormField = FormFieldMixin<{
   kind: 'date';
@@ -150,7 +148,7 @@ export type ScalarFormField<TValue extends RequiredScalarFieldValue = RequiredSc
       ? SetFormField<TValue>
       : never
   : TValue extends string
-    ? EnumFormField<TValue> | TextFormField
+    ? TextFormField<TValue>
     : TValue extends number
       ? NumberFormField
       : TValue extends boolean

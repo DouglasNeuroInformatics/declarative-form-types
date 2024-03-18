@@ -9,13 +9,13 @@ type MockFormData = {
   composite: {
     compositeItem: any;
   }[];
-  enum: 'a' | 'b' | 'c';
   numberDefault: number;
   numberSlider: number;
   set: Set<'a' | 'b' | 'c'>;
-  textLong: string;
-  textPassword: string;
-  textShort: string;
+  stringLong: string;
+  stringPassword: string;
+  stringSelect: 'a' | 'b' | 'c';
+  stringShort: string;
 };
 
 const mockFormFields: FormFields<MockFormData> = {
@@ -32,22 +32,13 @@ const mockFormFields: FormFields<MockFormData> = {
   composite: {
     fieldset: {
       compositeItem: {
-        kind: 'text',
+        kind: 'string',
         label: 'Are the types working correctly?',
         variant: 'short'
       }
     },
     kind: 'composite',
     label: 'Are the types working correctly?'
-  },
-  enum: {
-    kind: 'enum',
-    label: 'Are the types working correctly?',
-    options: {
-      a: 'a',
-      b: 'b',
-      c: 'c'
-    }
   },
   numberDefault: {
     kind: 'number',
@@ -70,18 +61,28 @@ const mockFormFields: FormFields<MockFormData> = {
       c: 'c'
     }
   },
-  textLong: {
-    kind: 'text',
+  stringLong: {
+    kind: 'string',
     label: 'Are the types working correctly?',
     variant: 'long'
   },
-  textPassword: {
-    kind: 'text',
+  stringPassword: {
+    kind: 'string',
     label: 'Are the types working correctly?',
     variant: 'password'
   },
-  textShort: {
-    kind: 'text',
+  stringSelect: {
+    kind: 'string',
+    label: 'Are the types working correctly?',
+    options: {
+      a: 'a',
+      b: 'b',
+      c: 'c'
+    },
+    variant: 'select'
+  },
+  stringShort: {
+    kind: 'string',
     label: 'Are the types working correctly?',
     variant: 'short'
   }
@@ -96,24 +97,23 @@ const mockFormFieldsGroup: FormFieldsGroup<MockFormData> = {
 expectType<'boolean' | 'dynamic'>(mockFormFields.booleanCheckbox.kind);
 expectType<'boolean' | 'dynamic'>(mockFormFields.booleanRadio.kind);
 expectType<'composite' | 'dynamic'>(mockFormFields.composite.kind);
-expectType<'dynamic' | 'enum' | 'text'>(mockFormFields.enum.kind);
 expectType<'dynamic' | 'number'>(mockFormFields.numberDefault.kind);
 expectType<'dynamic' | 'number'>(mockFormFields.numberSlider.kind);
 expectType<'dynamic' | 'set'>(mockFormFields.set.kind);
-expectType<'dynamic' | 'enum' | 'text'>(mockFormFields.textLong.kind);
-expectType<'dynamic' | 'enum' | 'text'>(mockFormFields.textPassword.kind);
-expectType<'dynamic' | 'enum' | 'text'>(mockFormFields.textShort.kind);
+expectType<'dynamic' | 'string'>(mockFormFields.stringLong.kind);
+expectType<'dynamic' | 'string'>(mockFormFields.stringPassword.kind);
+expectType<'dynamic' | 'string'>(mockFormFields.stringShort.kind);
 
 // UnknownFormField
 expectAssignable<UnknownFormField>(mockFormFields.booleanCheckbox);
 expectAssignable<UnknownFormField>(mockFormFields.booleanRadio);
-expectAssignable<UnknownFormField>(mockFormFields.enum);
+expectAssignable<UnknownFormField>(mockFormFields.stringSelect);
 expectAssignable<UnknownFormField>(mockFormFields.numberDefault);
 expectAssignable<UnknownFormField>(mockFormFields.numberSlider);
 expectAssignable<UnknownFormField>(mockFormFields.set);
-expectAssignable<UnknownFormField>(mockFormFields.textLong);
-expectAssignable<UnknownFormField>(mockFormFields.textPassword);
-expectAssignable<UnknownFormField>(mockFormFields.textShort);
+expectAssignable<UnknownFormField>(mockFormFields.stringLong);
+expectAssignable<UnknownFormField>(mockFormFields.stringPassword);
+expectAssignable<UnknownFormField>(mockFormFields.stringShort);
 
 // FormFields
 expectType<FormFields<MockFormData>>(mockFormFields);
