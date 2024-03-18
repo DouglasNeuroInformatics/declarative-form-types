@@ -23,7 +23,7 @@
   ],
   "scripts": {
     "docs:build": "typedoc",
-    "docs:dev": "typedoc --watch",
+    "docs:dev": "concurrently \"typedoc --watch\" \"http-server ./docs\"",
     "format": "prettier --write lib",
     "lint": "tsc --noEmit && eslint --fix lib",
     "prepare": "husky"
@@ -40,7 +40,9 @@
     "@commitlint/types": "^19.0.3",
     "@douglasneuroinformatics/eslint-config": "^4.1.1",
     "@semantic-release/git": "^10.0.1",
+    "concurrently": "^8.2.2",
     "eslint": "^8.57.0",
+    "http-server": "^14.1.1",
     "husky": "^9.0.11",
     "prettier": "^3.2.5",
     "semantic-release": "^23.0.2",
