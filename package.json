@@ -22,7 +22,8 @@
     "lib"
   ],
   "scripts": {
-    "build:docs": "typedoc",
+    "docs:build": "typedoc",
+    "docs:dev": "typedoc --watch",
     "format": "prettier --write lib",
     "lint": "tsc --noEmit && eslint --fix lib",
     "prepare": "husky"
