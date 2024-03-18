@@ -101,7 +101,7 @@ export type TextFormField<TValue extends string = string> = FormFieldMixin<
     }
 >;
 
-export type NumberFormField = FormFieldMixin<
+export type NumberFormField<TValue extends number = number> = FormFieldMixin<
   | {
       kind: 'number';
       max: number;
@@ -113,6 +113,11 @@ export type NumberFormField = FormFieldMixin<
       max?: number;
       min?: number;
       variant: 'input';
+    }
+  | {
+      kind: 'number';
+      options: Record<TValue, string>;
+      variant: 'radio';
     }
 >;
 
@@ -150,7 +155,7 @@ export type ScalarFormField<TValue extends RequiredScalarFieldValue = RequiredSc
   : TValue extends string
     ? TextFormField<TValue>
     : TValue extends number
-      ? NumberFormField
+      ? NumberFormField<TValue>
       : TValue extends boolean
         ? BooleanFormField
         : never;
