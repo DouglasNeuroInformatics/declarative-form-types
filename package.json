@@ -26,7 +26,8 @@
     "docs:dev": "concurrently \"typedoc --watch\" \"http-server ./docs\"",
     "format": "prettier --write lib",
     "lint": "tsc --noEmit && eslint --fix lib",
-    "prepare": "husky"
+    "prepare": "husky",
+    "test": "tsd"
   },
   "peerDependencies": {
     "typescript": "^5.3.3"
