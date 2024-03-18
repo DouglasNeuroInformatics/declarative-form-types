@@ -12,10 +12,10 @@ type MockFormData = {
   numberInput: number;
   numberSlider: number;
   set: Set<'a' | 'b' | 'c'>;
-  stringLong: string;
+  stringInput: string;
   stringPassword: string;
   stringSelect: 'a' | 'b' | 'c';
-  stringShort: string;
+  stringTextArea: string;
 };
 
 const mockFormFields: FormFields<MockFormData> = {
@@ -34,7 +34,7 @@ const mockFormFields: FormFields<MockFormData> = {
       compositeItem: {
         kind: 'string',
         label: 'Are the types working correctly?',
-        variant: 'short'
+        variant: 'input'
       }
     },
     kind: 'composite',
@@ -61,10 +61,10 @@ const mockFormFields: FormFields<MockFormData> = {
       c: 'c'
     }
   },
-  stringLong: {
+  stringInput: {
     kind: 'string',
     label: 'Are the types working correctly?',
-    variant: 'long'
+    variant: 'input'
   },
   stringPassword: {
     kind: 'string',
@@ -81,10 +81,10 @@ const mockFormFields: FormFields<MockFormData> = {
     },
     variant: 'select'
   },
-  stringShort: {
+  stringTextArea: {
     kind: 'string',
     label: 'Are the types working correctly?',
-    variant: 'short'
+    variant: 'textarea'
   }
 };
 
@@ -100,9 +100,9 @@ expectType<'composite' | 'dynamic'>(mockFormFields.composite.kind);
 expectType<'dynamic' | 'number'>(mockFormFields.numberInput.kind);
 expectType<'dynamic' | 'number'>(mockFormFields.numberSlider.kind);
 expectType<'dynamic' | 'set'>(mockFormFields.set.kind);
-expectType<'dynamic' | 'string'>(mockFormFields.stringLong.kind);
+expectType<'dynamic' | 'string'>(mockFormFields.stringTextArea.kind);
 expectType<'dynamic' | 'string'>(mockFormFields.stringPassword.kind);
-expectType<'dynamic' | 'string'>(mockFormFields.stringShort.kind);
+expectType<'dynamic' | 'string'>(mockFormFields.stringInput.kind);
 
 // UnknownFormField
 expectAssignable<UnknownFormField>(mockFormFields.booleanCheckbox);
@@ -111,9 +111,9 @@ expectAssignable<UnknownFormField>(mockFormFields.stringSelect);
 expectAssignable<UnknownFormField>(mockFormFields.numberInput);
 expectAssignable<UnknownFormField>(mockFormFields.numberSlider);
 expectAssignable<UnknownFormField>(mockFormFields.set);
-expectAssignable<UnknownFormField>(mockFormFields.stringLong);
+expectAssignable<UnknownFormField>(mockFormFields.stringTextArea);
 expectAssignable<UnknownFormField>(mockFormFields.stringPassword);
-expectAssignable<UnknownFormField>(mockFormFields.stringShort);
+expectAssignable<UnknownFormField>(mockFormFields.stringInput);
 
 // FormFields
 expectType<FormFields<MockFormData>>(mockFormFields);

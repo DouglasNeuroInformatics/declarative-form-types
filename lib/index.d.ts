@@ -97,7 +97,7 @@ export type TextFormField<TValue extends string = string> = FormFieldMixin<
     }
   | {
       kind: 'string';
-      variant: 'long' | 'password' | 'short';
+      variant: 'input' | 'password' | 'textarea';
     }
 >;
 
