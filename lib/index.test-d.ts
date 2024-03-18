@@ -92,7 +92,7 @@ const mockFormFieldsGroup: FormFieldsGroup<MockFormData> = {
   title: 'Mock Group'
 };
 
-// PrimitiveFormField
+// ScalarFormField
 expectType<'boolean' | 'dynamic'>(mockFormFields.booleanCheckbox.kind);
 expectType<'boolean' | 'dynamic'>(mockFormFields.booleanRadio.kind);
 expectType<'composite' | 'dynamic'>(mockFormFields.composite.kind);

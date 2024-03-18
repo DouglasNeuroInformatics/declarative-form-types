@@ -5,31 +5,31 @@ export type FormFieldKind = 'boolean' | 'composite' | 'date' | 'enum' | 'number'
 
 // BASE DATA TYPES
 
-export type PrimitiveFieldValue = Date | Set<string> | boolean | number | string | undefined;
+export type ScalarFieldValue = Date | Set<string> | boolean | number | string | undefined;
 
-export type CompositeFieldsetValue = Record<string, PrimitiveFieldValue>;
+export type CompositeFieldsetValue = Record<string, ScalarFieldValue>;
 
 export type CompositeFieldValue = CompositeFieldsetValue[] | undefined;
 
-export type FormFieldValue = CompositeFieldValue | PrimitiveFieldValue;
+export type FormFieldValue = CompositeFieldValue | ScalarFieldValue;
 
 /** The type of the data associated with the entire instrument (i.e., the values for all fields) */
 export type FormDataType = Record<string, FormFieldValue>;
 
 // REQUIRED DATA TYPES
 
-export type RequiredPrimitiveFieldValue<T extends PrimitiveFieldValue = PrimitiveFieldValue> = NonNullable<T>;
+export type RequiredScalarFieldValue<T extends ScalarFieldValue = ScalarFieldValue> = NonNullable<T>;
 
 export type RequiredCompositeFieldsetValue<T extends CompositeFieldsetValue = CompositeFieldsetValue> = {
-  [K in keyof T]: RequiredPrimitiveFieldValue<T[K]>;
+  [K in keyof T]: RequiredScalarFieldValue<T[K]>;
 };
 
 export type RequiredCompositeFieldValue<T extends CompositeFieldValue = CompositeFieldValue> =
   RequiredCompositeFieldsetValue<NonNullable<T>[number]>[];
 
 export type RequiredFormFieldValue<T extends FormFieldValue = FormFieldValue> =
-  T extends NonNullable<PrimitiveFieldValue>
-    ? RequiredPrimitiveFieldValue<T>
+  T extends NonNullable<ScalarFieldValue>
+    ? RequiredScalarFieldValue<T>
     : T extends NonNullable<CompositeFieldValue>
       ? RequiredCompositeFieldValue
       : T;
@@ -37,11 +37,11 @@ export type RequiredFormFieldValue<T extends FormFieldValue = FormFieldValue> =
 export type RequiredFormDataType<T extends FormDataType = FormDataType> = {
   [K in keyof T]-?: NonNullable<T[K]> extends (infer U extends CompositeFieldsetValue)[]
     ? {
-        [P in keyof U]-?: NonNullable<U[P]> extends RequiredPrimitiveFieldValue ? NonNullable<U[P]> : never;
+        [P in keyof U]-?: NonNullable<U[P]> extends RequiredScalarFieldValue ? NonNullable<U[P]> : never;
       }[]
-    : NonNullable<T[K]> extends RequiredPrimitiveFieldValue
+    : NonNullable<T[K]> extends RequiredScalarFieldValue
       ? NonNullable<T[K]>
-      : RequiredCompositeFieldValue | RequiredPrimitiveFieldValue;
+      : RequiredCompositeFieldValue | RequiredScalarFieldValue;
 };
 
 /** The `FormDataType` with all `FormFieldValues` set to be optional */
@@ -143,28 +143,27 @@ export type SetFormField<TValue extends Set<string> = Set<string>> = FormFieldMi
 }>;
 
 /** A field where the underlying value of the field data is of type FormFieldValue */
-export type PrimitiveFormField<TValue extends RequiredPrimitiveFieldValue = RequiredPrimitiveFieldValue> =
-  TValue extends object
-    ? TValue extends Date
-      ? DateFormField
-      : TValue extends Set<string>
-        ? SetFormField<TValue>
-        : never
-    : TValue extends string
-      ? EnumFormField<TValue> | TextFormField
-      : TValue extends number
-        ? NumberFormField
-        : TValue extends boolean
-          ? BooleanFormField
-          : never;
+export type ScalarFormField<TValue extends RequiredScalarFieldValue = RequiredScalarFieldValue> = TValue extends object
+  ? TValue extends Date
+    ? DateFormField
+    : TValue extends Set<string>
+      ? SetFormField<TValue>
+      : never
+  : TValue extends string
+    ? EnumFormField<TValue> | TextFormField
+    : TValue extends number
+      ? NumberFormField
+      : TValue extends boolean
+        ? BooleanFormField
+        : never;
 
-export type DynamicFieldsetField<T extends CompositeFieldsetValue, TValue extends RequiredPrimitiveFieldValue> = {
+export type DynamicFieldsetField<T extends CompositeFieldsetValue, TValue extends RequiredScalarFieldValue> = {
   kind: 'dynamic';
-  render: (fieldset: Partial<T>) => PrimitiveFormField<TValue> | null;
+  render: (fieldset: Partial<T>) => ScalarFormField<TValue> | null;
 };
 
 export type CompositeFieldset<T extends RequiredCompositeFieldsetValue> = {
-  [K in keyof T]: DynamicFieldsetField<T, T[K]> | PrimitiveFormField<T[K]>;
+  [K in keyof T]: DynamicFieldsetField<T, T[K]> | ScalarFormField<T[K]>;
 };
 
 export type CompositeFormField<TValue extends RequiredCompositeFieldValue = RequiredCompositeFieldValue> =
@@ -173,11 +172,11 @@ export type CompositeFormField<TValue extends RequiredCompositeFieldValue = Requ
     kind: 'composite';
   }>;
 
-export type StaticFormField<TValue extends RequiredFormFieldValue> = TValue extends RequiredPrimitiveFieldValue
-  ? PrimitiveFormField<TValue>
+export type StaticFormField<TValue extends RequiredFormFieldValue> = TValue extends RequiredScalarFieldValue
+  ? ScalarFormField<TValue>
   : TValue extends RequiredCompositeFieldValue
     ? CompositeFormField<TValue>
-    : CompositeFormField | PrimitiveFormField;
+    : CompositeFormField | ScalarFormField;
 
 export type StaticFormFields<
   TData extends FormDataType,
