@@ -1,7 +1,7 @@
 import type { Simplify } from 'type-fest';
 
 /** Discriminator key to determine the structure of a specific form field */
-export type FormFieldKind = 'array' | 'boolean' | 'date' | 'enum' | 'numeric' | 'text';
+export type FormFieldKind = 'array' | 'boolean' | 'date' | 'enum' | 'number' | 'text';
 
 // BASE DATA TYPES
 
@@ -95,15 +95,15 @@ export type TextFormField = FormFieldMixin<{
   variant: 'long' | 'password' | 'short';
 }>;
 
-export type NumericFormField = FormFieldMixin<
+export type NumberFormField = FormFieldMixin<
   | {
-      kind: 'numeric';
+      kind: 'number';
       max: number;
       min: number;
       variant: 'slider';
     }
   | {
-      kind: 'numeric';
+      kind: 'number';
       max?: number;
       min?: number;
       variant: 'default';
@@ -145,10 +145,10 @@ export type PrimitiveFormField<TValue extends RequiredPrimitiveFieldValue = Requ
     : TValue extends string
       ? EnumFormField<TValue> | TextFormField
       : TValue extends number
-        ? NumericFormField
+        ? NumberFormField
         : TValue extends boolean
           ? BooleanFormField
-          : BooleanFormField | DateFormField | EnumFormField | NumericFormField;
+          : BooleanFormField | DateFormField | EnumFormField | NumberFormField;
 
 export type DynamicFieldsetField<T extends ArrayFieldsetValue, TValue extends RequiredPrimitiveFieldValue> = {
   kind: 'dynamic-fieldset';
