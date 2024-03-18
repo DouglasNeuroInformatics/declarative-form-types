@@ -1,11 +1,11 @@
 import type { Simplify } from 'type-fest';
 
 /** Discriminator key to determine the structure of a specific form field */
-export type FormFieldKind = 'boolean' | 'composite' | 'date' | 'enum' | 'number' | 'text';
+export type FormFieldKind = 'boolean' | 'composite' | 'date' | 'enum' | 'number' | 'set' | 'text';
 
 // BASE DATA TYPES
 
-export type PrimitiveFieldValue = Date | boolean | number | string | undefined;
+export type PrimitiveFieldValue = Date | Set<string> | boolean | number | string | undefined;
 
 export type CompositeFieldsetValue = Record<string, PrimitiveFieldValue>;
 
@@ -137,17 +137,26 @@ export type BooleanFormField = FormFieldMixin<
     }
 >;
 
+export type SetFormField<TValue extends Set<string> = Set<string>> = FormFieldMixin<{
+  kind: 'set';
+  options: Record<TValue extends Set<infer TItem extends string> ? TItem : never, string>;
+}>;
+
 /** A field where the underlying value of the field data is of type FormFieldValue */
 export type PrimitiveFormField<TValue extends RequiredPrimitiveFieldValue = RequiredPrimitiveFieldValue> =
-  TValue extends Date
-    ? DateFormField
+  TValue extends object
+    ? TValue extends Date
+      ? DateFormField
+      : TValue extends Set<string>
+        ? SetFormField<TValue>
+        : never
     : TValue extends string
       ? EnumFormField<TValue> | TextFormField
       : TValue extends number
         ? NumberFormField
         : TValue extends boolean
           ? BooleanFormField
-          : BooleanFormField | DateFormField | EnumFormField | NumberFormField;
+          : never;
 
 export type DynamicFieldsetField<T extends CompositeFieldsetValue, TValue extends RequiredPrimitiveFieldValue> = {
   kind: 'dynamic';
