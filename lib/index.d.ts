@@ -150,7 +150,7 @@ export type PrimitiveFormField<TValue extends RequiredPrimitiveFieldValue = Requ
           : BooleanFormField | DateFormField | EnumFormField | NumberFormField;
 
 export type DynamicFieldsetField<T extends CompositeFieldsetValue, TValue extends RequiredPrimitiveFieldValue> = {
-  kind: 'dynamic-fieldset';
+  kind: 'dynamic';
   render: (fieldset: Partial<T>) => PrimitiveFormField<TValue> | null;
 };
 
