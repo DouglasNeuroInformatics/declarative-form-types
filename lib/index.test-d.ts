@@ -61,7 +61,7 @@ const mockFormFields: FormFields<MockFormData> = {
       b: 'b',
       c: 'c'
     },
-    variant: 'radio'
+    variant: 'listbox'
   },
   setSelect: {
     kind: 'set',

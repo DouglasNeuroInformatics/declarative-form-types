@@ -143,7 +143,7 @@ export type BooleanFormField = FormFieldMixin<
 export type SetFormField<TValue extends Set<string> = Set<string>> = FormFieldMixin<{
   kind: 'set';
   options: Record<TValue extends Set<infer TItem extends string> ? TItem : never, string>;
-  variant: 'radio' | 'select';
+  variant: 'listbox' | 'select';
 }>;
 
 /** A field where the underlying value of the field data is of type FormFieldValue */
