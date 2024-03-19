@@ -1,7 +1,7 @@
 {
   "name": "@douglasneuroinformatics/libui-form-types",
   "type": "module",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "packageManager": "pnpm@8.15.3",
   "description": "Type declarations for the declarative form component in libui",
   "author": {
@@ -28,9 +28,6 @@
     "lint": "tsc --noEmit && eslint --fix lib",
     "prepare": "husky",
     "test": "tsd"
-  },
-  "peerDependencies": {
-    "typescript": "^5.3.3"
   },
   "dependencies": {
     "type-fest": "^4.12.0"
