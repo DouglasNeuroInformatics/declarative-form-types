@@ -217,3 +217,5 @@ export type FormFieldsGroup<TData extends FormDataType> = {
 };
 
 export type FormContent<TData extends FormDataType = FormDataType> = FormFields<TData> | FormFieldsGroup<TData>[];
+
+// This is an example for demo purposes
