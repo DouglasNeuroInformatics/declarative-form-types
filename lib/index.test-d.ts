@@ -11,7 +11,8 @@ type MockFormData = {
   }[];
   numberInput: number;
   numberSlider: number;
-  set: Set<'a' | 'b' | 'c'>;
+  setRadio: Set<'a' | 'b' | 'c'>;
+  setSelect: Set<'a' | 'b' | 'c'>;
   stringInput: string;
   stringPassword: string;
   stringSelect: 'a' | 'b' | 'c';
@@ -52,14 +53,25 @@ const mockFormFields: FormFields<MockFormData> = {
     min: 1,
     variant: 'slider'
   },
-  set: {
+  setRadio: {
     kind: 'set',
     label: 'Are the types working correctly?',
     options: {
       a: 'a',
       b: 'b',
       c: 'c'
-    }
+    },
+    variant: 'radio'
+  },
+  setSelect: {
+    kind: 'set',
+    label: 'Are the types working correctly?',
+    options: {
+      a: 'a',
+      b: 'b',
+      c: 'c'
+    },
+    variant: 'select'
   },
   stringInput: {
     kind: 'string',
@@ -99,7 +111,8 @@ expectType<'boolean' | 'dynamic'>(mockFormFields.booleanRadio.kind);
 expectType<'composite' | 'dynamic'>(mockFormFields.composite.kind);
 expectType<'dynamic' | 'number'>(mockFormFields.numberInput.kind);
 expectType<'dynamic' | 'number'>(mockFormFields.numberSlider.kind);
-expectType<'dynamic' | 'set'>(mockFormFields.set.kind);
+expectType<'dynamic' | 'set'>(mockFormFields.setRadio.kind);
+expectType<'dynamic' | 'set'>(mockFormFields.setSelect.kind);
 expectType<'dynamic' | 'string'>(mockFormFields.stringTextArea.kind);
 expectType<'dynamic' | 'string'>(mockFormFields.stringPassword.kind);
 expectType<'dynamic' | 'string'>(mockFormFields.stringInput.kind);
@@ -110,7 +123,8 @@ expectAssignable<UnknownFormField>(mockFormFields.booleanRadio);
 expectAssignable<UnknownFormField>(mockFormFields.stringSelect);
 expectAssignable<UnknownFormField>(mockFormFields.numberInput);
 expectAssignable<UnknownFormField>(mockFormFields.numberSlider);
-expectAssignable<UnknownFormField>(mockFormFields.set);
+expectAssignable<UnknownFormField>(mockFormFields.setRadio);
+expectAssignable<UnknownFormField>(mockFormFields.setSelect);
 expectAssignable<UnknownFormField>(mockFormFields.stringTextArea);
 expectAssignable<UnknownFormField>(mockFormFields.stringPassword);
 expectAssignable<UnknownFormField>(mockFormFields.stringInput);
