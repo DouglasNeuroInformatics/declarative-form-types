@@ -93,7 +93,7 @@ export type TextFormField<TValue extends string = string> = FormFieldMixin<
   | {
       kind: 'string';
       options: Record<TValue, string>;
-      variant: 'select';
+      variant: 'radio' | 'select';
     }
   | {
       kind: 'string';
