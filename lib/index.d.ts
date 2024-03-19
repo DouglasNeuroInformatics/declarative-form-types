@@ -129,8 +129,8 @@ export type BooleanFormField = FormFieldMixin<
   | {
       kind: 'boolean';
       options?: {
-        f: string;
-        t: string;
+        false: string;
+        true: string;
       };
       variant: 'radio';
     }
