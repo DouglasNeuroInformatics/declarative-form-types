@@ -1,4 +1,4 @@
-import type { Simplify } from 'type-fest';
+import type { SetNonNullable, Simplify } from 'type-fest';
 
 // FIELD KINDS (DISCRIMINATOR KEY)
 
@@ -27,12 +27,8 @@ export type FormDataType = Record<string, FormFieldValue>;
 
 // REQUIRED DATA TYPES
 
-export type RequiredFieldsetValue<T extends FieldsetValue = FieldsetValue> = {
-  [K in keyof T]: NonNullable<T[K]>;
-};
-
 export type RequiredFieldsetArrayFieldValue<T extends FieldsetArrayFieldValue = FieldsetArrayFieldValue> =
-  RequiredFieldsetValue<NonNullable<T>[number]>[];
+  SetNonNullable<NonNullable<T>[number]>[];
 
 export type RequiredFormFieldValue<T extends FormFieldValue = FormFieldValue> =
   T extends NonNullable<ScalarFieldValue>
@@ -174,7 +170,7 @@ export type DynamicFieldsetField<T extends FieldsetValue, TValue extends NonNull
   render: (fieldset: Partial<T>) => ScalarFormField<TValue> | null;
 };
 
-export type Fieldset<T extends RequiredFieldsetValue> = {
+export type Fieldset<T extends SetNonNullable<FieldsetValue>> = {
   [K in keyof T]: DynamicFieldsetField<T, T[K]> | ScalarFormField<T[K]>;
 };
 
