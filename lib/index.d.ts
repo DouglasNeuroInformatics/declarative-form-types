@@ -27,52 +27,36 @@ export type FormDataType = Record<string, FormFieldValue>;
 
 // REQUIRED DATA TYPES
 
-export type RequiredFormFieldValue<T extends FormFieldValue = FormFieldValue> = T extends infer U extends
-  NonNullable<ScalarFieldValue>
-  ? U
-  : T extends infer U extends NonNullable<CompositeFieldValue>
-    ? U extends (infer V)[]
-      ? Required<V>[]
-      : Required<U>
-    : never;
+export type RequiredFormFieldValue<TValue extends FormFieldValue = FormFieldValue> =
+  TValue extends infer TScalarValue extends NonNullable<ScalarFieldValue>
+    ? TScalarValue
+    : TValue extends infer TCompositeValue extends NonNullable<CompositeFieldValue>
+      ? TCompositeValue extends (infer TArrayItem)[]
+        ? Required<TArrayItem>[]
+        : Required<TCompositeValue>
+      : never;
 
-export type OptionalFormFieldValue<T extends FormFieldValue = FormFieldValue> = T extends infer U extends
-  NonNullable<ScalarFieldValue>
-  ? U | undefined
-  : T extends infer U extends NonNullable<CompositeFieldValue>
-    ? U extends (infer V)[]
-      ? Partial<V>[] | undefined
-      : Partial<U> | undefined
+export type OptionalFormFieldValue<
+  TValue extends FormFieldValue = FormFieldValue,
+  TNull extends null = never
+> = TValue extends infer TScalarValue extends NonNullable<ScalarFieldValue>
+  ? TNull | TScalarValue | undefined
+  : TValue extends infer TCompositeValue extends NonNullable<CompositeFieldValue>
+    ? TCompositeValue extends (infer TArrayItem)[]
+      ? Partial<TArrayItem>[] | TNull | undefined
+      : Partial<TCompositeValue> | TNull | undefined
     : never;
 
 export type RequiredFormDataType<T extends FormDataType = FormDataType> = {
   [K in keyof T]-?: RequiredFormFieldValue<T[K]>;
 };
 
-/** The `FormDataType` with all `FormFieldValues` set to be optional */
 export type PartialFormDataType<T extends FormDataType = FormDataType> = {
-  [K in keyof T]?: NonNullable<T[K]> extends (infer U extends FieldsetValue)[]
-    ?
-        | {
-            [P in keyof U]?: U[P];
-          }[]
-        | undefined
-    : NonNullable<T[K]> extends FormFieldValue
-      ? T[K]
-      : never;
+  [K in keyof T]?: OptionalFormFieldValue<T[K]>;
 };
 
 export type PartialNullableFormDataType<T extends FormDataType = FormDataType> = {
-  [K in keyof T]?: NonNullable<T[K]> extends (infer U extends FieldsetValue)[]
-    ?
-        | {
-            [P in keyof U]?: U[P] | null | undefined;
-          }[]
-        | null
-        | undefined
-    : NonNullable<T[K]> extends FormFieldValue
-      ? T[K] | null | undefined
-      : never;
+  [K in keyof T]?: OptionalFormFieldValue<T[K], null>;
 };
 
 /** The basic properties common to all field kinds */
