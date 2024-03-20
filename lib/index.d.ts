@@ -11,7 +11,7 @@ type NonNullableRecord<T> =
 
 // FIELD KINDS (DISCRIMINATOR KEY)
 
-export type StaticCompositeFieldKind = 'fieldset-array' | 'numeric-fieldset';
+export type StaticCompositeFieldKind = 'fieldset-array' | 'number-record';
 
 export type StaticScalarFieldKind = 'boolean' | 'date' | 'number' | 'set' | 'string';
 
@@ -25,9 +25,9 @@ export type FieldsetValue = Record<string, ScalarFieldValue>;
 
 export type FieldsetArrayFieldValue = FieldsetValue[] | undefined;
 
-export type NumericFieldsetFieldValue = Partial<Record<string, number>> | undefined;
+export type NumberRecordFieldValue = Partial<Record<string, number>> | undefined;
 
-export type CompositeFieldValue = FieldsetArrayFieldValue | NumericFieldsetFieldValue;
+export type CompositeFieldValue = FieldsetArrayFieldValue | NumberRecordFieldValue;
 
 export type FormFieldValue = CompositeFieldValue | ScalarFieldValue;
 
@@ -182,21 +182,24 @@ export type FieldsetArrayFormField<
   kind: 'fieldset-array';
 }>;
 
-export type NumericFieldsetFormField<
-  TFieldsetValue extends RequiredFieldValue<NumericFieldsetFieldValue> = RequiredFieldValue<NumericFieldsetFieldValue>
+export type NumberRecordFormField<
+  TValue extends RequiredFieldValue<NumberRecordFieldValue> = RequiredFieldValue<NumberRecordFieldValue>
 > = FormFieldMixin<{
-  fieldset: {
-    [K in keyof TFieldsetValue]: any;
+  entries: {
+    [K in keyof TValue]: {
+      description?: string;
+      label: string;
+    };
   };
-  kind: 'numeric-fieldset';
+  kind: 'number-record';
   variant: 'likert';
 }>;
 
 export type CompositeFormField<TValue extends RequiredFieldValue<CompositeFieldValue>> =
   TValue extends RequiredFieldValue<FieldsetArrayFieldValue>
     ? FieldsetArrayFormField<TValue>
-    : TValue extends RequiredFieldValue<NumericFieldsetFieldValue>
-      ? NumericFieldsetFormField<TValue>
+    : TValue extends RequiredFieldValue<NumberRecordFieldValue>
+      ? NumberRecordFormField<TValue>
       : never;
 
 export type StaticFormField<TValue extends RequiredFieldValue> =
@@ -205,8 +208,8 @@ export type StaticFormField<TValue extends RequiredFieldValue> =
     : TValue extends RequiredFieldValue<CompositeFieldValue>
       ? TValue extends RequiredFieldValue<FieldsetArrayFieldValue>
         ? FieldsetArrayFormField<TValue>
-        : TValue extends RequiredFieldValue<NumericFieldsetFieldValue>
-          ? NumericFieldsetFormField<TValue>
+        : TValue extends RequiredFieldValue<NumberRecordFieldValue>
+          ? NumberRecordFormField<TValue>
           : never
       : never;
 
