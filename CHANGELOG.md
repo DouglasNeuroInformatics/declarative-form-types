@@ -1,5 +1,33 @@
 Changelog
 
+## [0.5.0](https://github.com/DouglasNeuroInformatics/libui-form-types/compare/v0.4.0...v0.5.0) (2024-03-20)
+
+
+### Features
+
+* add numeric fieldset ([1f6fec0](https://github.com/DouglasNeuroInformatics/libui-form-types/commit/1f6fec03cae03670940dd46c2f566d3ab9183319))
+* add NumericFieldsetFormField ([41ce6d0](https://github.com/DouglasNeuroInformatics/libui-form-types/commit/41ce6d05ed2eb6c55b344dac7e391247200e5243))
+
+
+### Bug Fixes
+
+* resolve issue with RequiredFormFieldValue ([bb2022b](https://github.com/DouglasNeuroInformatics/libui-form-types/commit/bb2022b7221e4a906d7b8b1531cb2b6f80b48f25))
+
+
+
+# [0.5.0](https://github.com/DouglasNeuroInformatics/libui-form-types/compare/v0.4.0...v0.5.0) (2024-03-20)
+
+
+### Bug Fixes
+
+* resolve issue with RequiredFormFieldValue ([bb2022b](https://github.com/DouglasNeuroInformatics/libui-form-types/commit/bb2022b7221e4a906d7b8b1531cb2b6f80b48f25))
+
+
+### Features
+
+* add numeric fieldset ([1f6fec0](https://github.com/DouglasNeuroInformatics/libui-form-types/commit/1f6fec03cae03670940dd46c2f566d3ab9183319))
+* add NumericFieldsetFormField ([41ce6d0](https://github.com/DouglasNeuroInformatics/libui-form-types/commit/41ce6d05ed2eb6c55b344dac7e391247200e5243))
+
 ## [0.4.0](https://github.com/DouglasNeuroInformatics/libui-form-types/compare/v0.3.1...v0.4.0) (2024-03-19)
 
 
