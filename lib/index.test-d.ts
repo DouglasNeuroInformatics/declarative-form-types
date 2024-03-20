@@ -7,8 +7,8 @@ import type {
   FormFields,
   FormFieldsGroup,
   NumericFieldsetFieldValue,
-  OptionalFormFieldValue,
-  RequiredFormFieldValue,
+  OptionalFieldValue,
+  RequiredFieldValue,
   ScalarFieldValue,
   UnknownFormField
 } from './index.d.ts';
@@ -115,14 +115,14 @@ const mockFormFieldsGroup: FormFieldsGroup<MockFormData> = {
   title: 'Mock Group'
 };
 
-// RequiredFormFieldValue
-expectType<Exclude<ScalarFieldValue, undefined>>(0 as RequiredFormFieldValue<ScalarFieldValue>);
-expectType<Record<string, number>>({} as RequiredFormFieldValue<NumericFieldsetFieldValue>);
+// RequiredFieldValue
+expectType<Exclude<ScalarFieldValue, undefined>>(0 as RequiredFieldValue<ScalarFieldValue>);
+expectType<Record<string, number>>({} as RequiredFieldValue<NumericFieldsetFieldValue>);
 
-// OptionalFormFieldValue
-expectType<string | undefined>('' as OptionalFormFieldValue<string>);
-expectType<NumericFieldsetFieldValue>({} as OptionalFormFieldValue<Record<string, number>>);
-expectType<FieldsetArrayFieldValue>([] as OptionalFormFieldValue<FieldsetValue[]>);
+// OptionalFieldValue
+expectType<string | undefined>('' as OptionalFieldValue<string>);
+expectType<NumericFieldsetFieldValue>({} as OptionalFieldValue<Record<string, number>>);
+expectType<FieldsetArrayFieldValue>([] as OptionalFieldValue<FieldsetValue[]>);
 
 // ScalarFormField
 expectType<'boolean' | 'dynamic'>(mockFormFields.booleanCheckbox.kind);
