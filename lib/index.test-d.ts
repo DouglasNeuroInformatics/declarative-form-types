@@ -6,8 +6,8 @@ import type { FormContent, FormFields, FormFieldsGroup, UnknownFormField } from 
 type MockFormData = {
   booleanCheckbox: boolean;
   booleanRadio: boolean;
-  composite: {
-    compositeItem: any;
+  fieldsetArray: {
+    fieldsetArrayItem: any;
   }[];
   numberInput: number;
   numberSlider: number;
@@ -30,15 +30,15 @@ const mockFormFields: FormFields<MockFormData> = {
     label: 'Are the types working correctly?',
     variant: 'radio'
   },
-  composite: {
+  fieldsetArray: {
     fieldset: {
-      compositeItem: {
+      fieldsetArrayItem: {
         kind: 'string',
         label: 'Are the types working correctly?',
         variant: 'input'
       }
     },
-    kind: 'composite',
+    kind: 'fieldset-array',
     label: 'Are the types working correctly?'
   },
   numberInput: {
@@ -108,7 +108,7 @@ const mockFormFieldsGroup: FormFieldsGroup<MockFormData> = {
 // ScalarFormField
 expectType<'boolean' | 'dynamic'>(mockFormFields.booleanCheckbox.kind);
 expectType<'boolean' | 'dynamic'>(mockFormFields.booleanRadio.kind);
-expectType<'composite' | 'dynamic'>(mockFormFields.composite.kind);
+expectType<'dynamic' | 'fieldset-array'>(mockFormFields.fieldsetArray.kind);
 expectType<'dynamic' | 'number'>(mockFormFields.numberInput.kind);
 expectType<'dynamic' | 'number'>(mockFormFields.numberSlider.kind);
 expectType<'dynamic' | 'set'>(mockFormFields.setRadio.kind);

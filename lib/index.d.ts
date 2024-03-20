@@ -1,17 +1,17 @@
 import type { Simplify } from 'type-fest';
 
 /** Discriminator key to determine the structure of a specific form field */
-export type StaticFormFieldKind = 'boolean' | 'composite' | 'date' | 'number' | 'set' | 'string';
+export type StaticFormFieldKind = 'boolean' | 'date' | 'fieldset-array' | 'number' | 'set' | 'string';
 
 // BASE DATA TYPES
 
 export type ScalarFieldValue = Date | Set<string> | boolean | number | string | undefined;
 
-export type CompositeFieldsetValue = Record<string, ScalarFieldValue>;
+export type FieldsetValue = Record<string, ScalarFieldValue>;
 
-export type CompositeFieldValue = CompositeFieldsetValue[] | undefined;
+export type FieldsetArrayFieldValue = FieldsetValue[] | undefined;
 
-export type FormFieldValue = CompositeFieldValue | ScalarFieldValue;
+export type FormFieldValue = FieldsetArrayFieldValue | ScalarFieldValue;
 
 /** The type of the data associated with the entire instrument (i.e., the values for all fields) */
 export type FormDataType = Record<string, FormFieldValue>;
@@ -20,33 +20,33 @@ export type FormDataType = Record<string, FormFieldValue>;
 
 export type RequiredScalarFieldValue<T extends ScalarFieldValue = ScalarFieldValue> = NonNullable<T>;
 
-export type RequiredCompositeFieldsetValue<T extends CompositeFieldsetValue = CompositeFieldsetValue> = {
+export type RequiredFieldsetValue<T extends FieldsetValue = FieldsetValue> = {
   [K in keyof T]: RequiredScalarFieldValue<T[K]>;
 };
 
-export type RequiredCompositeFieldValue<T extends CompositeFieldValue = CompositeFieldValue> =
-  RequiredCompositeFieldsetValue<NonNullable<T>[number]>[];
+export type RequiredFieldsetArrayFieldValue<T extends FieldsetArrayFieldValue = FieldsetArrayFieldValue> =
+  RequiredFieldsetValue<NonNullable<T>[number]>[];
 
 export type RequiredFormFieldValue<T extends FormFieldValue = FormFieldValue> =
   T extends NonNullable<ScalarFieldValue>
     ? RequiredScalarFieldValue<T>
-    : T extends NonNullable<CompositeFieldValue>
-      ? RequiredCompositeFieldValue
+    : T extends NonNullable<FieldsetArrayFieldValue>
+      ? RequiredFieldsetArrayFieldValue
       : T;
 
 export type RequiredFormDataType<T extends FormDataType = FormDataType> = {
-  [K in keyof T]-?: NonNullable<T[K]> extends (infer U extends CompositeFieldsetValue)[]
+  [K in keyof T]-?: NonNullable<T[K]> extends (infer U extends FieldsetValue)[]
     ? {
         [P in keyof U]-?: NonNullable<U[P]> extends RequiredScalarFieldValue ? NonNullable<U[P]> : never;
       }[]
     : NonNullable<T[K]> extends RequiredScalarFieldValue
       ? NonNullable<T[K]>
-      : RequiredCompositeFieldValue | RequiredScalarFieldValue;
+      : RequiredFieldsetArrayFieldValue | RequiredScalarFieldValue;
 };
 
 /** The `FormDataType` with all `FormFieldValues` set to be optional */
 export type PartialFormDataType<T extends FormDataType = FormDataType> = {
-  [K in keyof T]?: NonNullable<T[K]> extends (infer U extends CompositeFieldsetValue)[]
+  [K in keyof T]?: NonNullable<T[K]> extends (infer U extends FieldsetValue)[]
     ?
         | {
             [P in keyof U]?: U[P];
@@ -58,7 +58,7 @@ export type PartialFormDataType<T extends FormDataType = FormDataType> = {
 };
 
 export type PartialNullableFormDataType<T extends FormDataType = FormDataType> = {
-  [K in keyof T]?: NonNullable<T[K]> extends (infer U extends CompositeFieldsetValue)[]
+  [K in keyof T]?: NonNullable<T[K]> extends (infer U extends FieldsetValue)[]
     ?
         | {
             [P in keyof U]?: U[P] | null | undefined;
@@ -161,26 +161,26 @@ export type ScalarFormField<TValue extends RequiredScalarFieldValue = RequiredSc
         ? BooleanFormField
         : never;
 
-export type DynamicFieldsetField<T extends CompositeFieldsetValue, TValue extends RequiredScalarFieldValue> = {
+export type DynamicFieldsetField<T extends FieldsetValue, TValue extends RequiredScalarFieldValue> = {
   kind: 'dynamic';
   render: (fieldset: Partial<T>) => ScalarFormField<TValue> | null;
 };
 
-export type CompositeFieldset<T extends RequiredCompositeFieldsetValue> = {
+export type Fieldset<T extends RequiredFieldsetValue> = {
   [K in keyof T]: DynamicFieldsetField<T, T[K]> | ScalarFormField<T[K]>;
 };
 
-export type CompositeFormField<TValue extends RequiredCompositeFieldValue = RequiredCompositeFieldValue> =
+export type FieldsetArrayFormField<TValue extends RequiredFieldsetArrayFieldValue = RequiredFieldsetArrayFieldValue> =
   FormFieldMixin<{
-    fieldset: CompositeFieldset<TValue[number]>;
-    kind: 'composite';
+    fieldset: Fieldset<TValue[number]>;
+    kind: 'fieldset-array';
   }>;
 
 export type StaticFormField<TValue extends RequiredFormFieldValue> = TValue extends RequiredScalarFieldValue
   ? ScalarFormField<TValue>
-  : TValue extends RequiredCompositeFieldValue
-    ? CompositeFormField<TValue>
-    : CompositeFormField | ScalarFormField;
+  : TValue extends RequiredFieldsetArrayFieldValue
+    ? FieldsetArrayFormField<TValue>
+    : FieldsetArrayFormField | ScalarFormField;
 
 export type StaticFormFields<
   TData extends FormDataType,
