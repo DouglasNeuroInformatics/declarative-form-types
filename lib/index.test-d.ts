@@ -1,11 +1,13 @@
-// import _ from 'lodash';
 import { expectAssignable, expectType } from 'tsd';
 
 import type {
+  FieldsetArrayFieldValue,
+  FieldsetValue,
   FormContent,
   FormFields,
   FormFieldsGroup,
   NumericFieldsetFieldValue,
+  OptionalFormFieldValue,
   RequiredFormFieldValue,
   ScalarFieldValue,
   UnknownFormField
@@ -116,6 +118,11 @@ const mockFormFieldsGroup: FormFieldsGroup<MockFormData> = {
 // RequiredFormFieldValue
 expectType<Exclude<ScalarFieldValue, undefined>>(0 as RequiredFormFieldValue<ScalarFieldValue>);
 expectType<Exclude<NumericFieldsetFieldValue, undefined>>({} as RequiredFormFieldValue<NumericFieldsetFieldValue>);
+
+// OptionalFormFieldValue
+expectType<string | undefined>('' as OptionalFormFieldValue<string>);
+expectType<NumericFieldsetFieldValue>({} as OptionalFormFieldValue<Record<string, number>>);
+expectType<FieldsetArrayFieldValue>([] as OptionalFormFieldValue<FieldsetValue[]>);
 
 // ScalarFormField
 expectType<'boolean' | 'dynamic'>(mockFormFields.booleanCheckbox.kind);

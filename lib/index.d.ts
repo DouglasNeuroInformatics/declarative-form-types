@@ -16,7 +16,7 @@ export type FieldsetValue = Record<string, ScalarFieldValue>;
 
 export type FieldsetArrayFieldValue = FieldsetValue[] | undefined;
 
-export type NumericFieldsetFieldValue = Record<string, number> | undefined;
+export type NumericFieldsetFieldValue = Partial<Record<string, number>> | undefined;
 
 export type CompositeFieldValue = FieldsetArrayFieldValue | NumericFieldsetFieldValue;
 
@@ -31,7 +31,18 @@ export type RequiredFormFieldValue<T extends FormFieldValue = FormFieldValue> = 
   NonNullable<ScalarFieldValue>
   ? U
   : T extends infer U extends NonNullable<CompositeFieldValue>
-    ? RequiredDeep<U>
+    ? U extends (infer V)[]
+      ? Required<V>[]
+      : Required<U>
+    : never;
+
+export type OptionalFormFieldValue<T extends FormFieldValue = FormFieldValue> = T extends infer U extends
+  NonNullable<ScalarFieldValue>
+  ? U | undefined
+  : T extends infer U extends NonNullable<CompositeFieldValue>
+    ? U extends (infer V)[]
+      ? Partial<V>[] | undefined
+      : Partial<U> | undefined
     : never;
 
 export type RequiredFormDataType<T extends FormDataType = FormDataType> = {
