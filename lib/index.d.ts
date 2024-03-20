@@ -47,16 +47,16 @@ export type OptionalFormFieldValue<
       : Partial<TCompositeValue> | TNull | undefined
     : never;
 
-export type RequiredFormDataType<T extends FormDataType = FormDataType> = {
-  [K in keyof T]-?: RequiredFormFieldValue<T[K]>;
+export type RequiredFormDataType<TData extends FormDataType = FormDataType> = {
+  [K in keyof TData]-?: RequiredFormFieldValue<TData[K]>;
 };
 
-export type PartialFormDataType<T extends FormDataType = FormDataType> = {
-  [K in keyof T]?: OptionalFormFieldValue<T[K]>;
+export type PartialFormDataType<TData extends FormDataType = FormDataType> = {
+  [K in keyof TData]?: OptionalFormFieldValue<TData[K]>;
 };
 
-export type PartialNullableFormDataType<T extends FormDataType = FormDataType> = {
-  [K in keyof T]?: OptionalFormFieldValue<T[K], null>;
+export type PartialNullableFormDataType<TData extends FormDataType = FormDataType> = {
+  [K in keyof TData]?: OptionalFormFieldValue<TData[K], null>;
 };
 
 /** The basic properties common to all field kinds */
@@ -76,7 +76,7 @@ export type BaseFormField = {
  * the data type stored in the form and variant determines what will be rendered
  * to the user, if applicable
  */
-export type FormFieldMixin<T extends { kind: StaticFieldKind }> = Simplify<BaseFormField & T>;
+export type FormFieldMixin<TField extends { kind: StaticFieldKind }> = Simplify<BaseFormField & TField>;
 
 export type TextFormField<TValue extends string = string> = FormFieldMixin<
   | {
@@ -151,13 +151,15 @@ export type ScalarFormField<TValue extends NonNullable<ScalarFieldValue> = NonNu
           ? BooleanFormField
           : never;
 
-export type DynamicFieldsetField<T extends FieldsetValue, TValue extends NonNullable<ScalarFieldValue>> = {
+export type DynamicFieldsetField<TFieldsetValue extends FieldsetValue, TValue extends NonNullable<ScalarFieldValue>> = {
   kind: 'dynamic';
-  render: (fieldset: Partial<T>) => ScalarFormField<TValue> | null;
+  render: (fieldset: Partial<TFieldsetValue>) => ScalarFormField<TValue> | null;
 };
 
-export type Fieldset<T extends SetNonNullable<FieldsetValue>> = {
-  [K in keyof T]: DynamicFieldsetField<T, T[K]> | ScalarFormField<T[K]>;
+export type Fieldset<TFieldsetValue extends SetNonNullable<FieldsetValue>> = {
+  [K in keyof TFieldsetValue]:
+    | DynamicFieldsetField<TFieldsetValue, TFieldsetValue[K]>
+    | ScalarFormField<TFieldsetValue[K]>;
 };
 
 export type FieldsetArrayFormField<
