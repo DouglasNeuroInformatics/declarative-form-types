@@ -1,7 +1,12 @@
 import type { Simplify } from 'type-fest';
 
-/** Discriminator key to determine the structure of a specific form field */
-export type StaticFieldKind = 'boolean' | 'date' | 'fieldset-array' | 'number' | 'set' | 'string';
+// FIELD KINDS (DISCRIMINATOR KEY)
+
+export type StaticCompositeFieldKind = 'fieldset-array' | 'numeric-fieldset';
+
+export type StaticScalarFieldKind = 'boolean' | 'date' | 'number' | 'set' | 'string';
+
+export type StaticFieldKind = Simplify<StaticCompositeFieldKind | StaticScalarFieldKind>;
 
 // BASE DATA TYPES
 
@@ -11,7 +16,11 @@ export type FieldsetValue = Record<string, ScalarFieldValue>;
 
 export type FieldsetArrayFieldValue = FieldsetValue[] | undefined;
 
-export type FormFieldValue = FieldsetArrayFieldValue | ScalarFieldValue;
+export type NumericFieldsetFieldValue = Record<string, number>;
+
+export type CompositeFieldValue = FieldsetArrayFieldValue | NumericFieldsetFieldValue;
+
+export type FormFieldValue = CompositeFieldValue | ScalarFieldValue;
 
 /** The type of the data associated with the entire instrument (i.e., the values for all fields) */
 export type FormDataType = Record<string, FormFieldValue>;
