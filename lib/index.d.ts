@@ -1,7 +1,7 @@
 import type { Simplify } from 'type-fest';
 
 /** Discriminator key to determine the structure of a specific form field */
-export type StaticFormFieldKind = 'boolean' | 'date' | 'fieldset-array' | 'number' | 'set' | 'string';
+export type StaticFieldKind = 'boolean' | 'date' | 'fieldset-array' | 'number' | 'set' | 'string';
 
 // BASE DATA TYPES
 
@@ -76,7 +76,7 @@ export type BaseFormField = {
   description?: string;
 
   /** Discriminator key */
-  kind: StaticFormFieldKind;
+  kind: StaticFieldKind;
 
   /** The label to be displayed to the user */
   label: string;
@@ -87,7 +87,7 @@ export type BaseFormField = {
  * the data type stored in the form and variant determines what will be rendered
  * to the user, if applicable
  */
-export type FormFieldMixin<T extends { kind: StaticFormFieldKind }> = Simplify<BaseFormField & T>;
+export type FormFieldMixin<T extends { kind: StaticFieldKind }> = Simplify<BaseFormField & T>;
 
 export type TextFormField<TValue extends string = string> = FormFieldMixin<
   | {
