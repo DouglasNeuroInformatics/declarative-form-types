@@ -5,6 +5,8 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
+env:
+  HUSKY: 0
 jobs:
   release:
     name: Release
