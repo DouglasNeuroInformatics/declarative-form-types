@@ -11,7 +11,7 @@ type NonNullableRecord<T> =
 
 // FIELD KINDS (DISCRIMINATOR KEY)
 
-export type StaticCompositeFieldKind = 'fieldset-array' | 'number-record';
+export type StaticCompositeFieldKind = 'number-record' | 'record-array';
 
 export type StaticScalarFieldKind = 'boolean' | 'date' | 'number' | 'set' | 'string';
 
@@ -23,11 +23,11 @@ export type ScalarFieldValue = Date | Set<string> | boolean | number | string | 
 
 export type FieldsetValue = Record<string, ScalarFieldValue>;
 
-export type FieldsetArrayFieldValue = FieldsetValue[] | undefined;
+export type RecordArrayFieldValue = FieldsetValue[] | undefined;
 
 export type NumberRecordFieldValue = Partial<Record<string, number>> | undefined;
 
-export type CompositeFieldValue = FieldsetArrayFieldValue | NumberRecordFieldValue;
+export type CompositeFieldValue = NumberRecordFieldValue | RecordArrayFieldValue;
 
 export type FormFieldValue = CompositeFieldValue | ScalarFieldValue;
 
@@ -175,11 +175,11 @@ export type Fieldset<TFieldsetValue extends NonNullableRecord<FieldsetValue>> = 
     | ScalarFormField<TFieldsetValue[K]>;
 };
 
-export type FieldsetArrayFormField<
-  TValue extends RequiredFieldValue<FieldsetArrayFieldValue> = RequiredFieldValue<FieldsetArrayFieldValue>
+export type RecordArrayFormField<
+  TValue extends RequiredFieldValue<RecordArrayFieldValue> = RequiredFieldValue<RecordArrayFieldValue>
 > = FormFieldMixin<{
   fieldset: Fieldset<TValue[number]>;
-  kind: 'fieldset-array';
+  kind: 'record-array';
 }>;
 
 export type NumberRecordFormField<
@@ -196,8 +196,8 @@ export type NumberRecordFormField<
 }>;
 
 export type CompositeFormField<TValue extends RequiredFieldValue<CompositeFieldValue>> =
-  TValue extends RequiredFieldValue<FieldsetArrayFieldValue>
-    ? FieldsetArrayFormField<TValue>
+  TValue extends RequiredFieldValue<RecordArrayFieldValue>
+    ? RecordArrayFormField<TValue>
     : TValue extends RequiredFieldValue<NumberRecordFieldValue>
       ? NumberRecordFormField<TValue>
       : never;
@@ -206,8 +206,8 @@ export type StaticFormField<TValue extends RequiredFieldValue> =
   TValue extends RequiredFieldValue<ScalarFieldValue>
     ? ScalarFormField<TValue>
     : TValue extends RequiredFieldValue<CompositeFieldValue>
-      ? TValue extends RequiredFieldValue<FieldsetArrayFieldValue>
-        ? FieldsetArrayFormField<TValue>
+      ? TValue extends RequiredFieldValue<RecordArrayFieldValue>
+        ? RecordArrayFormField<TValue>
         : TValue extends RequiredFieldValue<NumberRecordFieldValue>
           ? NumberRecordFormField<TValue>
           : never

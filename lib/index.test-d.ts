@@ -1,13 +1,13 @@
 import { expectAssignable, expectType } from 'tsd';
 
 import type {
-  FieldsetArrayFieldValue,
   FieldsetValue,
   FormContent,
   FormFields,
   FormFieldsGroup,
   NumberRecordFieldValue,
   OptionalFieldValue,
+  RecordArrayFieldValue,
   RequiredFieldValue,
   ScalarFieldValue,
   UnknownFormField
@@ -16,11 +16,11 @@ import type {
 type MockFormData = {
   booleanCheckbox: boolean;
   booleanRadio: boolean;
-  fieldsetArray: {
-    fieldsetArrayItem: any;
-  }[];
   numberInput: number;
   numberSlider: number;
+  recordArray: {
+    recordArrayItem: any;
+  }[];
   setRadio: Set<'a' | 'b' | 'c'>;
   setSelect: Set<'a' | 'b' | 'c'>;
   stringInput: string;
@@ -40,17 +40,6 @@ const mockFormFields: FormFields<MockFormData> = {
     label: 'Are the types working correctly?',
     variant: 'radio'
   },
-  fieldsetArray: {
-    fieldset: {
-      fieldsetArrayItem: {
-        kind: 'string',
-        label: 'Are the types working correctly?',
-        variant: 'input'
-      }
-    },
-    kind: 'fieldset-array',
-    label: 'Are the types working correctly?'
-  },
   numberInput: {
     kind: 'number',
     label: 'Are the types working correctly?',
@@ -62,6 +51,17 @@ const mockFormFields: FormFields<MockFormData> = {
     max: 10,
     min: 1,
     variant: 'slider'
+  },
+  recordArray: {
+    fieldset: {
+      recordArrayItem: {
+        kind: 'string',
+        label: 'Are the types working correctly?',
+        variant: 'input'
+      }
+    },
+    kind: 'record-array',
+    label: 'Are the types working correctly?'
   },
   setRadio: {
     kind: 'set',
@@ -122,12 +122,12 @@ expectType<Record<string, number>>({} as RequiredFieldValue<NumberRecordFieldVal
 // OptionalFieldValue
 expectType<string | undefined>('' as OptionalFieldValue<string>);
 expectType<NumberRecordFieldValue>({} as OptionalFieldValue<Record<string, number>>);
-expectType<FieldsetArrayFieldValue>([] as OptionalFieldValue<FieldsetValue[]>);
+expectType<RecordArrayFieldValue>([] as OptionalFieldValue<FieldsetValue[]>);
 
 // ScalarFormField
 expectType<'boolean' | 'dynamic'>(mockFormFields.booleanCheckbox.kind);
 expectType<'boolean' | 'dynamic'>(mockFormFields.booleanRadio.kind);
-expectType<'dynamic' | 'fieldset-array'>(mockFormFields.fieldsetArray.kind);
+expectType<'dynamic' | 'record-array'>(mockFormFields.recordArray.kind);
 expectType<'dynamic' | 'number'>(mockFormFields.numberInput.kind);
 expectType<'dynamic' | 'number'>(mockFormFields.numberSlider.kind);
 expectType<'dynamic' | 'set'>(mockFormFields.setRadio.kind);
