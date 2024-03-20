@@ -1,4 +1,13 @@
-import type { RequiredDeep, SetNonNullable, Simplify } from 'type-fest';
+import type { Simplify } from 'type-fest';
+
+// INTERNAL UTILITIES
+
+type NonNullableRecord<T> =
+  NonNullable<T> extends infer U extends Record<string, unknown>
+    ? {
+        [K in keyof U]-?: NonNullable<U[K]>;
+      }
+    : never;
 
 // FIELD KINDS (DISCRIMINATOR KEY)
 
@@ -32,8 +41,8 @@ export type RequiredFormFieldValue<TValue extends FormFieldValue = FormFieldValu
     ? TScalarValue
     : TValue extends infer TCompositeValue extends NonNullable<CompositeFieldValue>
       ? TCompositeValue extends (infer TArrayItem)[]
-        ? Required<TArrayItem>[]
-        : Required<TCompositeValue>
+        ? NonNullableRecord<TArrayItem>[]
+        : NonNullableRecord<TCompositeValue>
       : never;
 
 export type OptionalFormFieldValue<
@@ -136,45 +145,68 @@ export type SetFormField<TValue extends Set<string> = Set<string>> = FormFieldMi
 }>;
 
 /** A field where the underlying value of the field data is of type FormFieldValue */
-export type ScalarFormField<TValue extends NonNullable<ScalarFieldValue> = NonNullable<ScalarFieldValue>> =
-  TValue extends object
-    ? TValue extends Date
-      ? DateFormField
-      : TValue extends Set<string>
-        ? SetFormField<TValue>
-        : never
-    : TValue extends string
-      ? TextFormField<TValue>
-      : TValue extends number
-        ? NumberFormField<TValue>
-        : TValue extends boolean
-          ? BooleanFormField
-          : never;
+export type ScalarFormField<
+  TValue extends RequiredFormFieldValue<ScalarFieldValue> = RequiredFormFieldValue<ScalarFieldValue>
+> = TValue extends object
+  ? TValue extends Date
+    ? DateFormField
+    : TValue extends Set<string>
+      ? SetFormField<TValue>
+      : never
+  : TValue extends string
+    ? TextFormField<TValue>
+    : TValue extends number
+      ? NumberFormField<TValue>
+      : TValue extends boolean
+        ? BooleanFormField
+        : never;
 
-export type DynamicFieldsetField<TFieldsetValue extends FieldsetValue, TValue extends NonNullable<ScalarFieldValue>> = {
+export type DynamicFieldsetField<
+  TFieldsetValue extends FieldsetValue,
+  TValue extends RequiredFormFieldValue<ScalarFieldValue>
+> = {
   kind: 'dynamic';
   render: (fieldset: Partial<TFieldsetValue>) => ScalarFormField<TValue> | null;
 };
 
-export type Fieldset<TFieldsetValue extends SetNonNullable<FieldsetValue>> = {
+export type Fieldset<TFieldsetValue extends NonNullableRecord<FieldsetValue>> = {
   [K in keyof TFieldsetValue]:
     | DynamicFieldsetField<TFieldsetValue, TFieldsetValue[K]>
     | ScalarFormField<TFieldsetValue[K]>;
 };
 
 export type FieldsetArrayFormField<
-  TValue extends RequiredDeep<FieldsetArrayFieldValue> = RequiredDeep<FieldsetArrayFieldValue>
+  TValue extends RequiredFormFieldValue<FieldsetArrayFieldValue> = RequiredFormFieldValue<FieldsetArrayFieldValue>
 > = FormFieldMixin<{
   fieldset: Fieldset<TValue[number]>;
   kind: 'fieldset-array';
 }>;
 
+export type NumericFieldsetFormField<TFieldsetValue extends Record<string, number>> = FormFieldMixin<{
+  fieldset: {
+    [K in keyof TFieldsetValue]: any;
+  };
+  kind: 'numeric-fieldset';
+  variant: 'likert';
+}>;
+
+export type CompositeFormField<TValue extends RequiredFormFieldValue<CompositeFieldValue>> =
+  TValue extends RequiredFormFieldValue<FieldsetArrayFieldValue>
+    ? FieldsetArrayFormField<TValue>
+    : TValue extends RequiredFormFieldValue<NumericFieldsetFieldValue>
+      ? NumericFieldsetFormField<TValue>
+      : never;
+
 export type StaticFormField<TValue extends RequiredFormFieldValue> =
-  TValue extends NonNullable<ScalarFieldValue>
+  TValue extends RequiredFormFieldValue<ScalarFieldValue>
     ? ScalarFormField<TValue>
-    : TValue extends RequiredDeep<FieldsetArrayFieldValue>
-      ? FieldsetArrayFormField<TValue>
-      : FieldsetArrayFormField | ScalarFormField;
+    : TValue extends RequiredFormFieldValue<CompositeFieldValue>
+      ? TValue extends RequiredFormFieldValue<FieldsetArrayFieldValue>
+        ? FieldsetArrayFormField<TValue>
+        : TValue extends RequiredFormFieldValue<NumericFieldsetFieldValue>
+          ? NumericFieldsetFormField<TValue>
+          : never
+      : never;
 
 export type StaticFormFields<
   TData extends FormDataType,

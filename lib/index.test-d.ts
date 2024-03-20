@@ -117,7 +117,7 @@ const mockFormFieldsGroup: FormFieldsGroup<MockFormData> = {
 
 // RequiredFormFieldValue
 expectType<Exclude<ScalarFieldValue, undefined>>(0 as RequiredFormFieldValue<ScalarFieldValue>);
-expectType<Exclude<NumericFieldsetFieldValue, undefined>>({} as RequiredFormFieldValue<NumericFieldsetFieldValue>);
+expectType<Record<string, number>>({} as RequiredFormFieldValue<NumericFieldsetFieldValue>);
 
 // OptionalFormFieldValue
 expectType<string | undefined>('' as OptionalFormFieldValue<string>);
