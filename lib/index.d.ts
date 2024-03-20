@@ -27,10 +27,8 @@ export type FormDataType = Record<string, FormFieldValue>;
 
 // REQUIRED DATA TYPES
 
-export type RequiredScalarFieldValue<T extends ScalarFieldValue = ScalarFieldValue> = NonNullable<T>;
-
 export type RequiredFieldsetValue<T extends FieldsetValue = FieldsetValue> = {
-  [K in keyof T]: RequiredScalarFieldValue<T[K]>;
+  [K in keyof T]: NonNullable<T[K]>;
 };
 
 export type RequiredFieldsetArrayFieldValue<T extends FieldsetArrayFieldValue = FieldsetArrayFieldValue> =
@@ -38,7 +36,7 @@ export type RequiredFieldsetArrayFieldValue<T extends FieldsetArrayFieldValue = 
 
 export type RequiredFormFieldValue<T extends FormFieldValue = FormFieldValue> =
   T extends NonNullable<ScalarFieldValue>
-    ? RequiredScalarFieldValue<T>
+    ? NonNullable<T>
     : T extends NonNullable<FieldsetArrayFieldValue>
       ? RequiredFieldsetArrayFieldValue
       : T;
@@ -46,11 +44,11 @@ export type RequiredFormFieldValue<T extends FormFieldValue = FormFieldValue> =
 export type RequiredFormDataType<T extends FormDataType = FormDataType> = {
   [K in keyof T]-?: NonNullable<T[K]> extends (infer U extends FieldsetValue)[]
     ? {
-        [P in keyof U]-?: NonNullable<U[P]> extends RequiredScalarFieldValue ? NonNullable<U[P]> : never;
+        [P in keyof U]-?: NonNullable<U[P]> extends NonNullable<ScalarFieldValue> ? NonNullable<U[P]> : never;
       }[]
-    : NonNullable<T[K]> extends RequiredScalarFieldValue
+    : NonNullable<T[K]> extends NonNullable<ScalarFieldValue>
       ? NonNullable<T[K]>
-      : RequiredFieldsetArrayFieldValue | RequiredScalarFieldValue;
+      : NonNullable<ScalarFieldValue> | RequiredFieldsetArrayFieldValue;
 };
 
 /** The `FormDataType` with all `FormFieldValues` set to be optional */
@@ -156,21 +154,22 @@ export type SetFormField<TValue extends Set<string> = Set<string>> = FormFieldMi
 }>;
 
 /** A field where the underlying value of the field data is of type FormFieldValue */
-export type ScalarFormField<TValue extends RequiredScalarFieldValue = RequiredScalarFieldValue> = TValue extends object
-  ? TValue extends Date
-    ? DateFormField
-    : TValue extends Set<string>
-      ? SetFormField<TValue>
-      : never
-  : TValue extends string
-    ? TextFormField<TValue>
-    : TValue extends number
-      ? NumberFormField<TValue>
-      : TValue extends boolean
-        ? BooleanFormField
-        : never;
+export type ScalarFormField<TValue extends NonNullable<ScalarFieldValue> = NonNullable<ScalarFieldValue>> =
+  TValue extends object
+    ? TValue extends Date
+      ? DateFormField
+      : TValue extends Set<string>
+        ? SetFormField<TValue>
+        : never
+    : TValue extends string
+      ? TextFormField<TValue>
+      : TValue extends number
+        ? NumberFormField<TValue>
+        : TValue extends boolean
+          ? BooleanFormField
+          : never;
 
-export type DynamicFieldsetField<T extends FieldsetValue, TValue extends RequiredScalarFieldValue> = {
+export type DynamicFieldsetField<T extends FieldsetValue, TValue extends NonNullable<ScalarFieldValue>> = {
   kind: 'dynamic';
   render: (fieldset: Partial<T>) => ScalarFormField<TValue> | null;
 };
@@ -185,11 +184,12 @@ export type FieldsetArrayFormField<TValue extends RequiredFieldsetArrayFieldValu
     kind: 'fieldset-array';
   }>;
 
-export type StaticFormField<TValue extends RequiredFormFieldValue> = TValue extends RequiredScalarFieldValue
-  ? ScalarFormField<TValue>
-  : TValue extends RequiredFieldsetArrayFieldValue
-    ? FieldsetArrayFormField<TValue>
-    : FieldsetArrayFormField | ScalarFormField;
+export type StaticFormField<TValue extends RequiredFormFieldValue> =
+  TValue extends NonNullable<ScalarFieldValue>
+    ? ScalarFormField<TValue>
+    : TValue extends RequiredFieldsetArrayFieldValue
+      ? FieldsetArrayFormField<TValue>
+      : FieldsetArrayFormField | ScalarFormField;
 
 export type StaticFormFields<
   TData extends FormDataType,
