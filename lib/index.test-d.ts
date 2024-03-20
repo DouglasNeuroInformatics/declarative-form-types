@@ -1,7 +1,15 @@
 // import _ from 'lodash';
 import { expectAssignable, expectType } from 'tsd';
 
-import type { FormContent, FormFields, FormFieldsGroup, UnknownFormField } from './index.d.ts';
+import type {
+  FormContent,
+  FormFields,
+  FormFieldsGroup,
+  NumericFieldsetFieldValue,
+  RequiredFormFieldValue,
+  ScalarFieldValue,
+  UnknownFormField
+} from './index.d.ts';
 
 type MockFormData = {
   booleanCheckbox: boolean;
@@ -104,6 +112,10 @@ const mockFormFieldsGroup: FormFieldsGroup<MockFormData> = {
   fields: mockFormFields,
   title: 'Mock Group'
 };
+
+// RequiredFormFieldValue
+expectType<Exclude<ScalarFieldValue, undefined>>(0 as RequiredFormFieldValue<ScalarFieldValue>);
+expectType<Exclude<NumericFieldsetFieldValue, undefined>>({} as RequiredFormFieldValue<NumericFieldsetFieldValue>);
 
 // ScalarFormField
 expectType<'boolean' | 'dynamic'>(mockFormFields.booleanCheckbox.kind);
