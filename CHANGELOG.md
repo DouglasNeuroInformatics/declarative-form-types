@@ -1,5 +1,21 @@
 Changelog
 
+## [0.6.0](https://github.com/DouglasNeuroInformatics/libui-form-types/compare/v0.5.0...v0.6.0) (2024-03-20)
+
+
+### Features
+
+* add number record options ([88f52a9](https://github.com/DouglasNeuroInformatics/libui-form-types/commit/88f52a90138bb67285118c9e6ac0e769c5994b9a))
+
+
+
+# [0.6.0](https://github.com/DouglasNeuroInformatics/libui-form-types/compare/v0.5.0...v0.6.0) (2024-03-20)
+
+
+### Features
+
+* add number record options ([88f52a9](https://github.com/DouglasNeuroInformatics/libui-form-types/commit/88f52a90138bb67285118c9e6ac0e769c5994b9a))
+
 ## [0.5.0](https://github.com/DouglasNeuroInformatics/libui-form-types/compare/v0.4.0...v0.5.0) (2024-03-20)
 
 
