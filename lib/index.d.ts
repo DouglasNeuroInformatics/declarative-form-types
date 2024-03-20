@@ -1,4 +1,4 @@
-import type { SetNonNullable, Simplify } from 'type-fest';
+import type { RequiredDeep, SetNonNullable, Simplify } from 'type-fest';
 
 // FIELD KINDS (DISCRIMINATOR KEY)
 
@@ -27,14 +27,11 @@ export type FormDataType = Record<string, FormFieldValue>;
 
 // REQUIRED DATA TYPES
 
-export type RequiredFieldsetArrayFieldValue<T extends FieldsetArrayFieldValue = FieldsetArrayFieldValue> =
-  SetNonNullable<NonNullable<T>[number]>[];
-
 export type RequiredFormFieldValue<T extends FormFieldValue = FormFieldValue> =
   T extends NonNullable<ScalarFieldValue>
     ? NonNullable<T>
     : T extends NonNullable<FieldsetArrayFieldValue>
-      ? RequiredFieldsetArrayFieldValue
+      ? RequiredDeep<FieldsetArrayFieldValue>
       : T;
 
 export type RequiredFormDataType<T extends FormDataType = FormDataType> = {
@@ -44,7 +41,7 @@ export type RequiredFormDataType<T extends FormDataType = FormDataType> = {
       }[]
     : NonNullable<T[K]> extends NonNullable<ScalarFieldValue>
       ? NonNullable<T[K]>
-      : NonNullable<ScalarFieldValue> | RequiredFieldsetArrayFieldValue;
+      : NonNullable<ScalarFieldValue> | RequiredDeep<FieldsetArrayFieldValue>;
 };
 
 /** The `FormDataType` with all `FormFieldValues` set to be optional */
@@ -174,16 +171,17 @@ export type Fieldset<T extends SetNonNullable<FieldsetValue>> = {
   [K in keyof T]: DynamicFieldsetField<T, T[K]> | ScalarFormField<T[K]>;
 };
 
-export type FieldsetArrayFormField<TValue extends RequiredFieldsetArrayFieldValue = RequiredFieldsetArrayFieldValue> =
-  FormFieldMixin<{
-    fieldset: Fieldset<TValue[number]>;
-    kind: 'fieldset-array';
-  }>;
+export type FieldsetArrayFormField<
+  TValue extends RequiredDeep<FieldsetArrayFieldValue> = RequiredDeep<FieldsetArrayFieldValue>
+> = FormFieldMixin<{
+  fieldset: Fieldset<TValue[number]>;
+  kind: 'fieldset-array';
+}>;
 
 export type StaticFormField<TValue extends RequiredFormFieldValue> =
   TValue extends NonNullable<ScalarFieldValue>
     ? ScalarFormField<TValue>
-    : TValue extends RequiredFieldsetArrayFieldValue
+    : TValue extends RequiredDeep<FieldsetArrayFieldValue>
       ? FieldsetArrayFormField<TValue>
       : FieldsetArrayFormField | ScalarFormField;
 
