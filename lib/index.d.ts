@@ -185,7 +185,7 @@ export type RecordArrayFormField<
 export type NumberRecordFormField<
   TValue extends RequiredFieldValue<NumberRecordFieldValue> = RequiredFieldValue<NumberRecordFieldValue>
 > = FormFieldMixin<{
-  entries: {
+  items: {
     [K in keyof TValue]: {
       description?: string;
       label: string;
