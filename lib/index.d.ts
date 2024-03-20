@@ -192,6 +192,7 @@ export type NumberRecordFormField<
     };
   };
   kind: 'number-record';
+  options: Record<number, string>;
   variant: 'likert';
 }>;
 
