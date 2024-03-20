@@ -35,13 +35,7 @@ export type RequiredFormFieldValue<T extends FormFieldValue = FormFieldValue> = 
     : never;
 
 export type RequiredFormDataType<T extends FormDataType = FormDataType> = {
-  [K in keyof T]-?: NonNullable<T[K]> extends (infer U extends FieldsetValue)[]
-    ? {
-        [P in keyof U]-?: NonNullable<U[P]> extends NonNullable<ScalarFieldValue> ? NonNullable<U[P]> : never;
-      }[]
-    : NonNullable<T[K]> extends NonNullable<ScalarFieldValue>
-      ? NonNullable<T[K]>
-      : NonNullable<ScalarFieldValue> | RequiredDeep<FieldsetArrayFieldValue>;
+  [K in keyof T]-?: RequiredFormFieldValue<T[K]>;
 };
 
 /** The `FormDataType` with all `FormFieldValues` set to be optional */
