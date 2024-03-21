@@ -87,7 +87,7 @@ export type BaseFormField = {
  */
 export type FormFieldMixin<TField extends { kind: StaticFieldKind }> = Simplify<BaseFormField & TField>;
 
-export type TextFormField<TValue extends string = string> = FormFieldMixin<
+export type StringFormField<TValue extends string = string> = FormFieldMixin<
   | {
       kind: 'string';
       options: Record<TValue, string>;
@@ -154,7 +154,7 @@ export type ScalarFormField<
       ? SetFormField<TValue>
       : never
   : TValue extends string
-    ? TextFormField<TValue>
+    ? StringFormField<TValue>
     : TValue extends number
       ? NumberFormField<TValue>
       : TValue extends boolean
