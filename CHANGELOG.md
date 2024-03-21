@@ -1,5 +1,21 @@
 Changelog
 
+## [0.6.1](https://github.com/DouglasNeuroInformatics/libui-form-types/compare/v0.6.0...v0.6.1) (2024-03-21)
+
+
+### Bug Fixes
+
+* rename TextFormField to StringFormField ([585bacb](https://github.com/DouglasNeuroInformatics/libui-form-types/commit/585bacb9e10b3ddce8c4e4c3f2e4634d52d4d21f))
+
+
+
+## [0.6.1](https://github.com/DouglasNeuroInformatics/libui-form-types/compare/v0.6.0...v0.6.1) (2024-03-21)
+
+
+### Bug Fixes
+
+* rename TextFormField to StringFormField ([585bacb](https://github.com/DouglasNeuroInformatics/libui-form-types/commit/585bacb9e10b3ddce8c4e4c3f2e4634d52d4d21f))
+
 ## [0.6.0](https://github.com/DouglasNeuroInformatics/libui-form-types/compare/v0.5.0...v0.6.0) (2024-03-20)
 
 
