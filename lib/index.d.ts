@@ -3,7 +3,7 @@ import type { Simplify } from 'type-fest';
 // INTERNAL UTILITIES
 
 type NonNullableRecord<T> =
-  NonNullable<T> extends infer U extends Record<string, unknown>
+  NonNullable<T> extends infer U extends { [key: string]: unknown }
     ? {
         [K in keyof U]-?: NonNullable<U[K]>;
       }
@@ -21,18 +21,18 @@ export type StaticFieldKind = Simplify<StaticCompositeFieldKind | StaticScalarFi
 
 export type ScalarFieldValue = Date | Set<string> | boolean | number | string | undefined;
 
-export type FieldsetValue = Record<string, ScalarFieldValue>;
+export type FieldsetValue = { [key: string]: ScalarFieldValue };
 
 export type RecordArrayFieldValue = FieldsetValue[] | undefined;
 
-export type NumberRecordFieldValue = Partial<Record<string, number>> | undefined;
+export type NumberRecordFieldValue = Partial<{ [key: string]: number }> | undefined;
 
 export type CompositeFieldValue = NumberRecordFieldValue | RecordArrayFieldValue;
 
 export type FormFieldValue = CompositeFieldValue | ScalarFieldValue;
 
 /** The type of the data associated with the entire instrument (i.e., the values for all fields) */
-export type FormDataType = Record<string, FormFieldValue>;
+export type FormDataType = { [key: string]: FormFieldValue };
 
 // REQUIRED DATA TYPES
 
@@ -90,7 +90,7 @@ export type FormFieldMixin<TField extends { kind: StaticFieldKind }> = Simplify<
 export type StringFormField<TValue extends string = string> = FormFieldMixin<
   | {
       kind: 'string';
-      options: Record<TValue, string>;
+      options: { [K in TValue]: string };
       variant: 'radio' | 'select';
     }
   | {
@@ -114,7 +114,7 @@ export type NumberFormField<TValue extends number = number> = FormFieldMixin<
     }
   | {
       kind: 'number';
-      options: Record<TValue, string>;
+      options: { [K in TValue]: string };
       variant: 'radio';
     }
 >;
@@ -140,7 +140,11 @@ export type BooleanFormField = FormFieldMixin<
 
 export type SetFormField<TValue extends Set<string> = Set<string>> = FormFieldMixin<{
   kind: 'set';
-  options: Record<TValue extends Set<infer TItem extends string> ? TItem : never, string>;
+  options: TValue extends Set<infer TItem extends string>
+    ? {
+        [K in TItem]: string;
+      }
+    : never;
   variant: 'listbox' | 'select';
 }>;
 
@@ -192,7 +196,7 @@ export type NumberRecordFormField<
     };
   };
   kind: 'number-record';
-  options: Record<number, string>;
+  options: { [key: number]: string };
   variant: 'likert';
 }>;
 

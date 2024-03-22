@@ -117,11 +117,11 @@ const mockFormFieldsGroup: FormFieldsGroup<MockFormData> = {
 
 // RequiredFieldValue
 expectType<Exclude<ScalarFieldValue, undefined>>(0 as RequiredFieldValue<ScalarFieldValue>);
-expectType<Record<string, number>>({} as RequiredFieldValue<NumberRecordFieldValue>);
+expectType<{ [key: string]: number }>({} as RequiredFieldValue<NumberRecordFieldValue>);
 
 // OptionalFieldValue
 expectType<string | undefined>('' as OptionalFieldValue<string>);
-expectType<NumberRecordFieldValue>({} as OptionalFieldValue<Record<string, number>>);
+expectType<NumberRecordFieldValue>({} as OptionalFieldValue<{ [key: string]: number }>);
 expectType<RecordArrayFieldValue>([] as OptionalFieldValue<FieldsetValue[]>);
 
 // ScalarFormField
