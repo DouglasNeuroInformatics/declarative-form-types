@@ -2,7 +2,7 @@ import type { Simplify } from 'type-fest';
 
 // INTERNAL UTILITIES
 
-type NonNullableRecord<T> =
+export type NonNullableRecord<T> =
   NonNullable<T> extends infer U extends { [key: string]: unknown }
     ? {
         [K in keyof U]-?: NonNullable<U[K]>;
