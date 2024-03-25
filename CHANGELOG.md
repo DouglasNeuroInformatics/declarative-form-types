@@ -1,5 +1,21 @@
 Changelog
 
+## [0.6.2](https://github.com/DouglasNeuroInformatics/libui-form-types/compare/v0.6.1...v0.6.2) (2024-03-22)
+
+
+### Bug Fixes
+
+* use mapped types ([bef4353](https://github.com/DouglasNeuroInformatics/libui-form-types/commit/bef435330f260d6fc13c4a970dfa1d5df075282b))
+
+
+
+## [0.6.2](https://github.com/DouglasNeuroInformatics/libui-form-types/compare/v0.6.1...v0.6.2) (2024-03-22)
+
+
+### Bug Fixes
+
+* use mapped types ([bef4353](https://github.com/DouglasNeuroInformatics/libui-form-types/commit/bef435330f260d6fc13c4a970dfa1d5df075282b))
+
 ## [0.6.1](https://github.com/DouglasNeuroInformatics/libui-form-types/compare/v0.6.0...v0.6.1) (2024-03-21)
 
 
