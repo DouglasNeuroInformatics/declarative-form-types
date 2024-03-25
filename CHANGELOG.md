@@ -1,5 +1,21 @@
 Changelog
 
+## [0.6.3](https://github.com/DouglasNeuroInformatics/libui-form-types/compare/v0.6.2...v0.6.3) (2024-03-25)
+
+
+### Bug Fixes
+
+* export NonNullableRecord ([0fc603d](https://github.com/DouglasNeuroInformatics/libui-form-types/commit/0fc603d9a8e431cc57764c77a4e159a84fd1022e))
+
+
+
+## [0.6.3](https://github.com/DouglasNeuroInformatics/libui-form-types/compare/v0.6.2...v0.6.3) (2024-03-25)
+
+
+### Bug Fixes
+
+* export NonNullableRecord ([0fc603d](https://github.com/DouglasNeuroInformatics/libui-form-types/commit/0fc603d9a8e431cc57764c77a4e159a84fd1022e))
+
 ## [0.6.2](https://github.com/DouglasNeuroInformatics/libui-form-types/compare/v0.6.1...v0.6.2) (2024-03-22)
 
 
