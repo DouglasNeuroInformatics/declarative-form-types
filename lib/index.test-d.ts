@@ -1,4 +1,4 @@
-import { expectAssignable, expectType } from 'tsd';
+import { expectAssignable, expectNotAssignable, expectType } from 'tsd';
 
 import type {
   FieldsetValue,
@@ -10,6 +10,7 @@ import type {
   RecordArrayFieldValue,
   RequiredFieldValue,
   ScalarFieldValue,
+  StringFormField,
   UnknownFormField
 } from './index.d.ts';
 
@@ -124,6 +125,27 @@ expectType<string | undefined>('' as OptionalFieldValue<string>);
 expectType<NumberRecordFieldValue>({} as OptionalFieldValue<{ [key: string]: number }>);
 expectType<RecordArrayFieldValue>([] as OptionalFieldValue<FieldsetValue[]>);
 
+// StringFormField
+expectNotAssignable<StringFormField<'a' | 'b' | 'c'>>({
+  kind: 'string',
+  label: '',
+  options: {
+    a: '',
+    b: ''
+  },
+  variant: 'select'
+});
+expectAssignable<StringFormField<'a' | 'b' | 'c'>>({
+  kind: 'string',
+  label: '',
+  options: {
+    a: '',
+    b: '',
+    c: ''
+  },
+  variant: 'select'
+});
+
 // ScalarFormField
 expectType<'boolean' | 'dynamic'>(mockFormFields.booleanCheckbox.kind);
 expectType<'boolean' | 'dynamic'>(mockFormFields.booleanRadio.kind);
@@ -157,3 +179,16 @@ expectType<FormFieldsGroup<MockFormData>>(mockFormFieldsGroup);
 // FormContent
 expectAssignable<FormContent<MockFormData>>(mockFormFields);
 expectAssignable<FormContent<MockFormData>>([mockFormFieldsGroup]);
+expectAssignable<FormContent>({});
+expectNotAssignable<FormContent<{ foo: 'a' | 'b' | 'c' }>>({});
+expectNotAssignable<FormContent<{ foo: 'a' | 'b' | 'c' }>>({
+  foo: {
+    kind: 'string',
+    label: 'Foo',
+    options: {
+      a: '',
+      b: ''
+    },
+    variant: 'select'
+  }
+});
