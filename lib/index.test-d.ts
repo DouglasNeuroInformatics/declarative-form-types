@@ -1,79 +1,64 @@
 import { expectTypeOf } from 'expect-type';
 
 import type {
+  BooleanFormField,
+  DateFormField,
   FieldsetValue,
-  FormFields,
   NumberRecordFieldValue,
   OptionalFieldValue,
   RecordArrayFieldValue,
   RequiredFieldValue,
   ScalarFieldValue,
+  ScalarFormField,
+  SetFormField,
   StringFormField,
   UnknownFormField
 } from './index.d.ts';
 
-type MockFormData = {
-  booleanCheckbox: boolean;
-  booleanRadio: boolean;
-  numberInput: number;
-  numberSlider: number;
-  recordArray: {
-    recordArrayItem: any;
-  }[];
-  setRadio: Set<'a' | 'b' | 'c'>;
-  setSelect: Set<'a' | 'b' | 'c'>;
-  stringInput: string;
-  stringPassword: string;
-  stringSelect: 'a' | 'b' | 'c';
-  stringTextArea: string;
-};
+/** RequiredFieldValue */
+{
+  expectTypeOf<Exclude<ScalarFieldValue, undefined>>().toMatchTypeOf<RequiredFieldValue<ScalarFieldValue>>();
+  expectTypeOf<{ [key: string]: number }>().toMatchTypeOf<RequiredFieldValue<NumberRecordFieldValue>>();
+  expectTypeOf<'a' | 'b'>().toMatchTypeOf<RequiredFieldValue<string>>();
+  expectTypeOf<'a' | 'b'>().not.toEqualTypeOf<RequiredFieldValue<string>>();
+  expectTypeOf<'a' | 'b'>().toEqualTypeOf<RequiredFieldValue<'a' | 'b'>>();
+  expectTypeOf<'a' | 'b'>().not.toEqualTypeOf<RequiredFieldValue<'a' | 'b' | 'c'>>();
+}
 
-type MockFormFields = FormFields<MockFormData>;
+/** OptionalFieldValue */
+{
+  expectTypeOf<string | undefined>().toMatchTypeOf<OptionalFieldValue<string>>();
+  expectTypeOf<RecordArrayFieldValue>().toMatchTypeOf<OptionalFieldValue<FieldsetValue[]>>();
+}
 
-// RequiredFieldValue
-expectTypeOf<Exclude<ScalarFieldValue, undefined>>().toMatchTypeOf<RequiredFieldValue<ScalarFieldValue>>();
-expectTypeOf<{ [key: string]: number }>().toMatchTypeOf<RequiredFieldValue<NumberRecordFieldValue>>();
+/** StringFormField */
+{
+  expectTypeOf<StringFormField<'a' | 'b' | 'c'>>().toMatchTypeOf<StringFormField<'a' | 'b' | 'c'>>();
+  expectTypeOf<StringFormField<'a' | 'b' | 'c'>>().not.toMatchTypeOf<StringFormField<'a' | 'b' | 'c' | 'd'>>();
+}
 
-// OptionalFieldValue
+/** ScalarFormField */
+{
+  expectTypeOf<ScalarFormField<Date>>().toEqualTypeOf<DateFormField>();
+  expectTypeOf<ScalarFormField<Set<string>>>().toEqualTypeOf<SetFormField>();
+  expectTypeOf<ScalarFormField<Set<string>>>().toEqualTypeOf<SetFormField<Set<string>>>();
+  expectTypeOf<keyof ScalarFormField<Set<string>>['options']>().toEqualTypeOf<string>();
+  expectTypeOf<ScalarFormField<Set<'a' | 'b'>>>().toEqualTypeOf<SetFormField<Set<'a' | 'b'>>>();
+  expectTypeOf<keyof ScalarFormField<Set<'a' | 'b'>>['options']>().toEqualTypeOf<'a' | 'b'>();
+  expectTypeOf<keyof Extract<ScalarFormField<string>, { options: object }>['options']>().toBeString();
+  expectTypeOf<keyof Extract<ScalarFormField<'a' | 'b'>, { options: object }>['options']>().toEqualTypeOf<'a' | 'b'>();
+  expectTypeOf<keyof Extract<ScalarFormField<number>, { options: object }>['options']>().toBeNumber();
+  expectTypeOf<keyof Extract<ScalarFormField<1 | 2>, { options: object }>['options']>().toEqualTypeOf<1 | 2>();
+  expectTypeOf<ScalarFormField<boolean>>().toEqualTypeOf<BooleanFormField>();
+}
 
-expectTypeOf<string | undefined>().toMatchTypeOf<OptionalFieldValue<string>>();
-expectTypeOf<NumberRecordFieldValue>();
-expectTypeOf<RecordArrayFieldValue>().toMatchTypeOf<OptionalFieldValue<FieldsetValue[]>>();
-
-// StringFormField
-const stringFormField = {
-  kind: 'string',
-  label: '',
-  options: {
-    a: '',
-    b: '',
-    c: ''
-  },
-  variant: 'select'
-} as const satisfies StringFormField<'a' | 'b' | 'c'>;
-expectTypeOf(stringFormField).toMatchTypeOf<StringFormField<'a' | 'b' | 'c'>>();
-expectTypeOf(stringFormField).not.toMatchTypeOf<StringFormField<'a' | 'b' | 'c' | 'd'>>();
-
-// ScalarFormField
-expectTypeOf<MockFormFields['booleanCheckbox']['kind']>().toMatchTypeOf<'boolean' | 'dynamic'>();
-expectTypeOf<MockFormFields['booleanRadio']['kind']>().toMatchTypeOf<'boolean' | 'dynamic'>();
-expectTypeOf<MockFormFields['recordArray']['kind']>().toMatchTypeOf<'dynamic' | 'record-array'>();
-expectTypeOf<MockFormFields['numberInput']['kind']>().toMatchTypeOf<'dynamic' | 'number'>();
-expectTypeOf<MockFormFields['numberSlider']['kind']>().toMatchTypeOf<'dynamic' | 'number'>();
-expectTypeOf<MockFormFields['setRadio']['kind']>().toMatchTypeOf<'dynamic' | 'set'>();
-expectTypeOf<MockFormFields['setSelect']['kind']>().toMatchTypeOf<'dynamic' | 'set'>();
-expectTypeOf<MockFormFields['stringTextArea']['kind']>().toMatchTypeOf<'dynamic' | 'string'>();
-expectTypeOf<MockFormFields['stringPassword']['kind']>().toMatchTypeOf<'dynamic' | 'string'>();
-expectTypeOf<MockFormFields['stringInput']['kind']>().toMatchTypeOf<'dynamic' | 'string'>();
-
-// UnknownFormField
-expectTypeOf<MockFormFields['booleanCheckbox']>().toMatchTypeOf<UnknownFormField>();
-expectTypeOf<MockFormFields['booleanRadio']>().toMatchTypeOf<UnknownFormField>();
-expectTypeOf<MockFormFields['recordArray']>().toMatchTypeOf<UnknownFormField>();
-expectTypeOf<MockFormFields['numberInput']>().toMatchTypeOf<UnknownFormField>();
-expectTypeOf<MockFormFields['numberSlider']>().toMatchTypeOf<UnknownFormField>();
-expectTypeOf<MockFormFields['setRadio']>().toMatchTypeOf<UnknownFormField>();
-expectTypeOf<MockFormFields['setSelect']>().toMatchTypeOf<UnknownFormField>();
-expectTypeOf<MockFormFields['stringTextArea']>().toMatchTypeOf<UnknownFormField>();
-expectTypeOf<MockFormFields['stringPassword']>().toMatchTypeOf<UnknownFormField>();
-expectTypeOf<MockFormFields['stringInput']>().toMatchTypeOf<UnknownFormField>();
+/** UnknownFormField */
+{
+  expectTypeOf<UnknownFormField<{ _: boolean }>['kind']>().toMatchTypeOf<'boolean' | 'dynamic'>();
+  expectTypeOf<UnknownFormField<{ _: RecordArrayFieldValue }>['kind']>().toMatchTypeOf<'dynamic' | 'record-array'>();
+  expectTypeOf<UnknownFormField<{ _: number }>['kind']>().toMatchTypeOf<'dynamic' | 'number'>();
+  expectTypeOf<UnknownFormField<{ _: Set<string> }>['kind']>().toMatchTypeOf<'dynamic' | 'set'>();
+  expectTypeOf<UnknownFormField<{ _: Set<'a' | 'b' | 'c'> }>['kind']>().toMatchTypeOf<'dynamic' | 'set'>();
+  expectTypeOf<UnknownFormField<{ _: string }>['kind']>().toMatchTypeOf<'dynamic' | 'string'>();
+  expectTypeOf<UnknownFormField<{ _: 'a' | 'b' | 'c' }>['kind']>().toMatchTypeOf<'dynamic' | 'string'>();
+}
