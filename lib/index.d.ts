@@ -151,17 +151,17 @@ export type SetFormField<TValue extends Set<string> = Set<string>> = FormFieldMi
 /** A field where the underlying value of the field data is of type FormFieldValue */
 export type ScalarFormField<
   TValue extends RequiredFieldValue<ScalarFieldValue> = RequiredFieldValue<ScalarFieldValue>
-> = TValue extends object
-  ? TValue extends Date
+> = [TValue] extends [object]
+  ? [TValue] extends [Date]
     ? DateFormField
-    : TValue extends Set<string>
+    : [TValue] extends [Set<string>]
       ? SetFormField<TValue>
       : never
-  : TValue extends string
+  : [TValue] extends [string]
     ? StringFormField<TValue>
-    : TValue extends number
+    : [TValue] extends [number]
       ? NumberFormField<TValue>
-      : TValue extends boolean
+      : [TValue] extends [boolean]
         ? BooleanFormField
         : never;
 
