@@ -207,16 +207,15 @@ export type CompositeFormField<TValue extends RequiredFieldValue<CompositeFieldV
       ? NumberRecordFormField<TValue>
       : never;
 
-export type StaticFormField<TValue extends RequiredFieldValue> =
-  TValue extends RequiredFieldValue<ScalarFieldValue>
-    ? ScalarFormField<TValue>
-    : TValue extends RequiredFieldValue<CompositeFieldValue>
-      ? TValue extends RequiredFieldValue<RecordArrayFieldValue>
-        ? RecordArrayFormField<TValue>
-        : TValue extends RequiredFieldValue<NumberRecordFieldValue>
-          ? NumberRecordFormField<TValue>
-          : never
-      : never;
+export type StaticFormField<TValue extends RequiredFieldValue> = [TValue] extends [RequiredFieldValue<ScalarFieldValue>]
+  ? ScalarFormField<TValue>
+  : [TValue] extends [RequiredFieldValue<CompositeFieldValue>]
+    ? [TValue] extends [RequiredFieldValue<RecordArrayFieldValue>]
+      ? RecordArrayFormField<TValue>
+      : [TValue] extends [RequiredFieldValue<NumberRecordFieldValue>]
+        ? NumberRecordFormField<TValue>
+        : never
+    : never;
 
 export type StaticFormFields<
   TData extends FormDataType,
