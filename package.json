@@ -19,7 +19,7 @@
   },
   "types": "lib/index.d.ts",
   "files": [
-    "lib"
+    "lib/index.d.ts"
   ],
   "scripts": {
     "docs:build": "typedoc",
