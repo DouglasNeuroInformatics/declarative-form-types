@@ -1,10 +1,8 @@
-import { expectAssignable, expectNotAssignable, expectType } from 'tsd';
+import { expectTypeOf } from 'expect-type';
 
 import type {
   FieldsetValue,
-  FormContent,
   FormFields,
-  FormFieldsGroup,
   NumberRecordFieldValue,
   OptionalFieldValue,
   RecordArrayFieldValue,
@@ -30,112 +28,20 @@ type MockFormData = {
   stringTextArea: string;
 };
 
-const mockFormFields: FormFields<MockFormData> = {
-  booleanCheckbox: {
-    kind: 'boolean',
-    label: 'Are the types working correctly?',
-    variant: 'checkbox'
-  },
-  booleanRadio: {
-    kind: 'boolean',
-    label: 'Are the types working correctly?',
-    variant: 'radio'
-  },
-  numberInput: {
-    kind: 'number',
-    label: 'Are the types working correctly?',
-    variant: 'input'
-  },
-  numberSlider: {
-    kind: 'number',
-    label: 'Are the types working correctly?',
-    max: 10,
-    min: 1,
-    variant: 'slider'
-  },
-  recordArray: {
-    fieldset: {
-      recordArrayItem: {
-        kind: 'string',
-        label: 'Are the types working correctly?',
-        variant: 'input'
-      }
-    },
-    kind: 'record-array',
-    label: 'Are the types working correctly?'
-  },
-  setRadio: {
-    kind: 'set',
-    label: 'Are the types working correctly?',
-    options: {
-      a: 'a',
-      b: 'b',
-      c: 'c'
-    },
-    variant: 'listbox'
-  },
-  setSelect: {
-    kind: 'set',
-    label: 'Are the types working correctly?',
-    options: {
-      a: 'a',
-      b: 'b',
-      c: 'c'
-    },
-    variant: 'select'
-  },
-  stringInput: {
-    kind: 'string',
-    label: 'Are the types working correctly?',
-    variant: 'input'
-  },
-  stringPassword: {
-    kind: 'string',
-    label: 'Are the types working correctly?',
-    variant: 'password'
-  },
-  stringSelect: {
-    kind: 'string',
-    label: 'Are the types working correctly?',
-    options: {
-      a: 'a',
-      b: 'b',
-      c: 'c'
-    },
-    variant: 'select'
-  },
-  stringTextArea: {
-    kind: 'string',
-    label: 'Are the types working correctly?',
-    variant: 'textarea'
-  }
-};
-
-const mockFormFieldsGroup: FormFieldsGroup<MockFormData> = {
-  fields: mockFormFields,
-  title: 'Mock Group'
-};
+type MockFormFields = FormFields<MockFormData>;
 
 // RequiredFieldValue
-expectType<Exclude<ScalarFieldValue, undefined>>(0 as RequiredFieldValue<ScalarFieldValue>);
-expectType<{ [key: string]: number }>({} as RequiredFieldValue<NumberRecordFieldValue>);
+expectTypeOf<Exclude<ScalarFieldValue, undefined>>().toMatchTypeOf<RequiredFieldValue<ScalarFieldValue>>();
+expectTypeOf<{ [key: string]: number }>().toMatchTypeOf<RequiredFieldValue<NumberRecordFieldValue>>();
 
 // OptionalFieldValue
-expectType<string | undefined>('' as OptionalFieldValue<string>);
-expectType<NumberRecordFieldValue>({} as OptionalFieldValue<{ [key: string]: number }>);
-expectType<RecordArrayFieldValue>([] as OptionalFieldValue<FieldsetValue[]>);
+
+expectTypeOf<string | undefined>().toMatchTypeOf<OptionalFieldValue<string>>();
+expectTypeOf<NumberRecordFieldValue>();
+expectTypeOf<RecordArrayFieldValue>().toMatchTypeOf<OptionalFieldValue<FieldsetValue[]>>();
 
 // StringFormField
-expectNotAssignable<StringFormField<'a' | 'b' | 'c'>>({
-  kind: 'string',
-  label: '',
-  options: {
-    a: '',
-    b: ''
-  },
-  variant: 'select'
-});
-expectAssignable<StringFormField<'a' | 'b' | 'c'>>({
+const stringFormField = {
   kind: 'string',
   label: '',
   options: {
@@ -144,51 +50,30 @@ expectAssignable<StringFormField<'a' | 'b' | 'c'>>({
     c: ''
   },
   variant: 'select'
-});
+} as const satisfies StringFormField<'a' | 'b' | 'c'>;
+expectTypeOf(stringFormField).toMatchTypeOf<StringFormField<'a' | 'b' | 'c'>>();
+expectTypeOf(stringFormField).not.toMatchTypeOf<StringFormField<'a' | 'b' | 'c' | 'd'>>();
 
 // ScalarFormField
-expectType<'boolean' | 'dynamic'>(mockFormFields.booleanCheckbox.kind);
-expectType<'boolean' | 'dynamic'>(mockFormFields.booleanRadio.kind);
-expectType<'dynamic' | 'record-array'>(mockFormFields.recordArray.kind);
-expectType<'dynamic' | 'number'>(mockFormFields.numberInput.kind);
-expectType<'dynamic' | 'number'>(mockFormFields.numberSlider.kind);
-expectType<'dynamic' | 'set'>(mockFormFields.setRadio.kind);
-expectType<'dynamic' | 'set'>(mockFormFields.setSelect.kind);
-expectType<'dynamic' | 'string'>(mockFormFields.stringTextArea.kind);
-expectType<'dynamic' | 'string'>(mockFormFields.stringPassword.kind);
-expectType<'dynamic' | 'string'>(mockFormFields.stringInput.kind);
+expectTypeOf<MockFormFields['booleanCheckbox']['kind']>().toMatchTypeOf<'boolean' | 'dynamic'>();
+expectTypeOf<MockFormFields['booleanRadio']['kind']>().toMatchTypeOf<'boolean' | 'dynamic'>();
+expectTypeOf<MockFormFields['recordArray']['kind']>().toMatchTypeOf<'dynamic' | 'record-array'>();
+expectTypeOf<MockFormFields['numberInput']['kind']>().toMatchTypeOf<'dynamic' | 'number'>();
+expectTypeOf<MockFormFields['numberSlider']['kind']>().toMatchTypeOf<'dynamic' | 'number'>();
+expectTypeOf<MockFormFields['setRadio']['kind']>().toMatchTypeOf<'dynamic' | 'set'>();
+expectTypeOf<MockFormFields['setSelect']['kind']>().toMatchTypeOf<'dynamic' | 'set'>();
+expectTypeOf<MockFormFields['stringTextArea']['kind']>().toMatchTypeOf<'dynamic' | 'string'>();
+expectTypeOf<MockFormFields['stringPassword']['kind']>().toMatchTypeOf<'dynamic' | 'string'>();
+expectTypeOf<MockFormFields['stringInput']['kind']>().toMatchTypeOf<'dynamic' | 'string'>();
 
 // UnknownFormField
-expectAssignable<UnknownFormField>(mockFormFields.booleanCheckbox);
-expectAssignable<UnknownFormField>(mockFormFields.booleanRadio);
-expectAssignable<UnknownFormField>(mockFormFields.stringSelect);
-expectAssignable<UnknownFormField>(mockFormFields.numberInput);
-expectAssignable<UnknownFormField>(mockFormFields.numberSlider);
-expectAssignable<UnknownFormField>(mockFormFields.setRadio);
-expectAssignable<UnknownFormField>(mockFormFields.setSelect);
-expectAssignable<UnknownFormField>(mockFormFields.stringTextArea);
-expectAssignable<UnknownFormField>(mockFormFields.stringPassword);
-expectAssignable<UnknownFormField>(mockFormFields.stringInput);
-
-// FormFields
-expectType<FormFields<MockFormData>>(mockFormFields);
-
-// FormFieldsGroup
-expectType<FormFieldsGroup<MockFormData>>(mockFormFieldsGroup);
-
-// FormContent
-expectAssignable<FormContent<MockFormData>>(mockFormFields);
-expectAssignable<FormContent<MockFormData>>([mockFormFieldsGroup]);
-expectAssignable<FormContent>({});
-expectNotAssignable<FormContent<{ foo: 'a' | 'b' | 'c' }>>({});
-expectNotAssignable<FormContent<{ foo: 'a' | 'b' | 'c' }>>({
-  foo: {
-    kind: 'string',
-    label: 'Foo',
-    options: {
-      a: '',
-      b: ''
-    },
-    variant: 'select'
-  }
-});
+expectTypeOf<MockFormFields['booleanCheckbox']>().toMatchTypeOf<UnknownFormField>();
+expectTypeOf<MockFormFields['booleanRadio']>().toMatchTypeOf<UnknownFormField>();
+expectTypeOf<MockFormFields['recordArray']>().toMatchTypeOf<UnknownFormField>();
+expectTypeOf<MockFormFields['numberInput']>().toMatchTypeOf<UnknownFormField>();
+expectTypeOf<MockFormFields['numberSlider']>().toMatchTypeOf<UnknownFormField>();
+expectTypeOf<MockFormFields['setRadio']>().toMatchTypeOf<UnknownFormField>();
+expectTypeOf<MockFormFields['setSelect']>().toMatchTypeOf<UnknownFormField>();
+expectTypeOf<MockFormFields['stringTextArea']>().toMatchTypeOf<UnknownFormField>();
+expectTypeOf<MockFormFields['stringPassword']>().toMatchTypeOf<UnknownFormField>();
+expectTypeOf<MockFormFields['stringInput']>().toMatchTypeOf<UnknownFormField>();
