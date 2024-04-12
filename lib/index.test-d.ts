@@ -1,11 +1,12 @@
 import { expectTypeOf } from 'expect-type';
 
 import type {
+  AnyScalarFormField,
+  AnyStaticFormField,
   BooleanFormField,
   DateFormField,
   FieldsetValue,
   FormFields,
-  NumberFormField,
   NumberRecordFieldValue,
   OptionalFieldValue,
   RecordArrayFieldValue,
@@ -13,6 +14,7 @@ import type {
   ScalarFieldValue,
   ScalarFormField,
   SetFormField,
+  StaticFormField,
   StringFormField,
   UnknownFormField
 } from './index.d.ts';
@@ -44,10 +46,8 @@ type ABCD = 'a' | 'b' | 'c' | 'd';
 
 /** ScalarFormField */
 {
-  expectTypeOf<ScalarFormField['kind']>().toMatchTypeOf<'boolean' | 'date' | 'number' | 'set' | 'string'>();
-  expectTypeOf<ScalarFormField>().toMatchTypeOf<
-    BooleanFormField | DateFormField | NumberFormField | SetFormField | StringFormField
-  >();
+  expectTypeOf<ScalarFormField['kind']>().toMatchTypeOf<AnyScalarFormField['kind']>();
+  expectTypeOf<ScalarFormField>().toMatchTypeOf<AnyScalarFormField>();
 
   expectTypeOf<ScalarFormField<Date>>().toEqualTypeOf<DateFormField>();
   expectTypeOf<ScalarFormField<Set<string>>>().toEqualTypeOf<SetFormField>();
@@ -60,6 +60,12 @@ type ABCD = 'a' | 'b' | 'c' | 'd';
   expectTypeOf<keyof Extract<ScalarFormField<number>, { options: object }>['options']>().toBeNumber();
   expectTypeOf<keyof Extract<ScalarFormField<1 | 2>, { options: object }>['options']>().toEqualTypeOf<1 | 2>();
   expectTypeOf<ScalarFormField<boolean>>().toEqualTypeOf<BooleanFormField>();
+}
+
+/** StaticFormField */
+{
+  expectTypeOf<StaticFormField['kind']>().toEqualTypeOf<AnyStaticFormField['kind']>();
+  expectTypeOf<StaticFormField>().toEqualTypeOf<AnyStaticFormField>();
 }
 
 /** UnknownFormField */

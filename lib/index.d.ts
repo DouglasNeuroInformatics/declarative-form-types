@@ -148,6 +148,8 @@ export type SetFormField<TValue extends Set<string> = Set<string>> = FormFieldMi
   variant: 'listbox' | 'select';
 }>;
 
+export type AnyScalarFormField = BooleanFormField | DateFormField | NumberFormField | SetFormField | StringFormField;
+
 /** A field where the underlying value of the field data is of type FormFieldValue */
 export type ScalarFormField<
   TValue extends RequiredFieldValue<ScalarFieldValue> = RequiredFieldValue<ScalarFieldValue>
@@ -163,7 +165,7 @@ export type ScalarFormField<
       ? NumberFormField<TValue>
       : [TValue] extends [boolean]
         ? BooleanFormField
-        : BooleanFormField | DateFormField | NumberFormField | SetFormField | StringFormField;
+        : AnyScalarFormField;
 
 export type DynamicFieldsetField<
   TFieldsetValue extends FieldsetValue,
@@ -207,7 +209,18 @@ export type CompositeFormField<TValue extends RequiredFieldValue<CompositeFieldV
       ? NumberRecordFormField<TValue>
       : never;
 
-export type StaticFormField<TValue extends RequiredFieldValue> = [TValue] extends [RequiredFieldValue<ScalarFieldValue>]
+export type AnyStaticFormField =
+  | BooleanFormField
+  | DateFormField
+  | NumberFormField
+  | NumberRecordFormField
+  | RecordArrayFormField
+  | SetFormField
+  | StringFormField;
+
+export type StaticFormField<TValue extends RequiredFieldValue = RequiredFieldValue> = [TValue] extends [
+  RequiredFieldValue<ScalarFieldValue>
+]
   ? ScalarFormField<TValue>
   : [TValue] extends [RequiredFieldValue<CompositeFieldValue>]
     ? [TValue] extends [RequiredFieldValue<RecordArrayFieldValue>]
@@ -215,7 +228,7 @@ export type StaticFormField<TValue extends RequiredFieldValue> = [TValue] extend
       : [TValue] extends [RequiredFieldValue<NumberRecordFieldValue>]
         ? NumberRecordFormField<TValue>
         : never
-    : never;
+    : AnyStaticFormField;
 
 export type StaticFormFields<
   TData extends FormDataType,
