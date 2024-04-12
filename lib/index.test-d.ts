@@ -5,6 +5,7 @@ import type {
   DateFormField,
   FieldsetValue,
   FormFields,
+  NumberFormField,
   NumberRecordFieldValue,
   OptionalFieldValue,
   RecordArrayFieldValue,
@@ -43,6 +44,11 @@ type ABCD = 'a' | 'b' | 'c' | 'd';
 
 /** ScalarFormField */
 {
+  expectTypeOf<ScalarFormField['kind']>().toMatchTypeOf<'boolean' | 'date' | 'number' | 'set' | 'string'>();
+  expectTypeOf<ScalarFormField>().toMatchTypeOf<
+    BooleanFormField | DateFormField | NumberFormField | SetFormField | StringFormField
+  >();
+
   expectTypeOf<ScalarFormField<Date>>().toEqualTypeOf<DateFormField>();
   expectTypeOf<ScalarFormField<Set<string>>>().toEqualTypeOf<SetFormField>();
   expectTypeOf<ScalarFormField<Set<string>>>().toEqualTypeOf<SetFormField<Set<string>>>();

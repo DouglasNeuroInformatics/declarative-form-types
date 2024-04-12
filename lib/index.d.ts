@@ -163,7 +163,7 @@ export type ScalarFormField<
       ? NumberFormField<TValue>
       : [TValue] extends [boolean]
         ? BooleanFormField
-        : never;
+        : BooleanFormField | DateFormField | NumberFormField | SetFormField | StringFormField;
 
 export type DynamicFieldsetField<
   TFieldsetValue extends FieldsetValue,
