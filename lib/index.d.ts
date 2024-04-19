@@ -240,7 +240,7 @@ export type StaticFormFields<
 export type DynamicFormField<TData extends FormDataType, TValue extends RequiredFieldValue = RequiredFieldValue> = {
   deps: readonly Extract<keyof TData, string>[];
   kind: 'dynamic';
-  render: (this: void, data: PartialFormDataType<TData> | null) => StaticFormField<TValue> | null;
+  render: (this: void, data: PartialFormDataType<TData>) => StaticFormField<TValue> | null;
 };
 
 export type UnknownFormField<
