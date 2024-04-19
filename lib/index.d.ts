@@ -258,7 +258,7 @@ export type FormFieldsGroup<TData extends FormDataType> = {
   fields: {
     [K in keyof TData]?: UnknownFormField<RequiredFormDataType<TData>, K>;
   };
-  title: string;
+  title?: string;
 };
 
 export type FormContent<TData extends FormDataType = FormDataType> = FormFields<TData> | FormFieldsGroup<TData>[];
