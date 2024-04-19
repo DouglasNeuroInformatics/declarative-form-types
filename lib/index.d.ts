@@ -172,7 +172,7 @@ export type DynamicFieldsetField<
   TValue extends RequiredFieldValue<ScalarFieldValue>
 > = {
   kind: 'dynamic';
-  render: (fieldset: Partial<TFieldsetValue>) => ScalarFormField<TValue> | null;
+  render: (this: void, fieldset: Partial<TFieldsetValue>) => ScalarFormField<TValue> | null;
 };
 
 export type Fieldset<TFieldsetValue extends NonNullableRecord<FieldsetValue>> = {
@@ -240,7 +240,7 @@ export type StaticFormFields<
 export type DynamicFormField<TData extends FormDataType, TValue extends RequiredFieldValue = RequiredFieldValue> = {
   deps: readonly Extract<keyof TData, string>[];
   kind: 'dynamic';
-  render: (data: PartialFormDataType<TData> | null) => StaticFormField<TValue> | null;
+  render: (this: void, data: PartialFormDataType<TData> | null) => StaticFormField<TValue> | null;
 };
 
 export type UnknownFormField<
