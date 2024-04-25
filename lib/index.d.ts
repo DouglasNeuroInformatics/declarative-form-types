@@ -115,7 +115,7 @@ export type NumberFormField<TValue extends number = number> = FormFieldMixin<
   | {
       kind: 'number';
       options: { [K in TValue]: string };
-      variant: 'radio';
+      variant: 'radio' | 'select';
     }
 >;
 
