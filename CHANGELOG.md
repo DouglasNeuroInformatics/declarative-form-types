@@ -1,5 +1,37 @@
 Changelog
 
+## [0.7.0](https://github.com/DouglasNeuroInformatics/libui-form-types/compare/v0.6.5...v0.7.0) (2024-06-23)
+
+
+### Features
+
+* add disableAutoPrefix option to NumberFormField ([fe121b8](https://github.com/DouglasNeuroInformatics/libui-form-types/commit/fe121b8136a20ae65c44bbba7ddf44801e7e3825))
+* add select option for number field ([cf1b555](https://github.com/DouglasNeuroInformatics/libui-form-types/commit/cf1b555f3475c15b2b359e9db702dea89061f52e))
+
+
+### Bug Fixes
+
+* allow title to be undefined ([6596e0a](https://github.com/DouglasNeuroInformatics/libui-form-types/commit/6596e0a5bb76263799e42c6387e0009b314d5f5f))
+* mark this as void in render function ([0d76e92](https://github.com/DouglasNeuroInformatics/libui-form-types/commit/0d76e9270cc292fc3ae2aafb821b3d49a9281a65))
+* remove possibility of null data ([de266be](https://github.com/DouglasNeuroInformatics/libui-form-types/commit/de266bee9279b91c7865be2e7c82a8bc585d58e6))
+
+
+
+# [0.7.0](https://github.com/DouglasNeuroInformatics/libui-form-types/compare/v0.6.5...v0.7.0) (2024-06-23)
+
+
+### Bug Fixes
+
+* allow title to be undefined ([6596e0a](https://github.com/DouglasNeuroInformatics/libui-form-types/commit/6596e0a5bb76263799e42c6387e0009b314d5f5f))
+* mark this as void in render function ([0d76e92](https://github.com/DouglasNeuroInformatics/libui-form-types/commit/0d76e9270cc292fc3ae2aafb821b3d49a9281a65))
+* remove possibility of null data ([de266be](https://github.com/DouglasNeuroInformatics/libui-form-types/commit/de266bee9279b91c7865be2e7c82a8bc585d58e6))
+
+
+### Features
+
+* add disableAutoPrefix option to NumberFormField ([fe121b8](https://github.com/DouglasNeuroInformatics/libui-form-types/commit/fe121b8136a20ae65c44bbba7ddf44801e7e3825))
+* add select option for number field ([cf1b555](https://github.com/DouglasNeuroInformatics/libui-form-types/commit/cf1b555f3475c15b2b359e9db702dea89061f52e))
+
 ## [0.6.3](https://github.com/DouglasNeuroInformatics/libui-form-types/compare/v0.6.2...v0.6.3) (2024-03-25)
 
 
