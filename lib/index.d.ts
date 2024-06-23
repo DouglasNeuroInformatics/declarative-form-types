@@ -101,6 +101,12 @@ export type StringFormField<TValue extends string = string> = FormFieldMixin<
 
 export type NumberFormField<TValue extends number = number> = FormFieldMixin<
   | {
+      disableAutoPrefix?: boolean;
+      kind: 'number';
+      options: { [K in TValue]: string };
+      variant: 'radio' | 'select';
+    }
+  | {
       kind: 'number';
       max: number;
       min: number;
@@ -111,11 +117,6 @@ export type NumberFormField<TValue extends number = number> = FormFieldMixin<
       max?: number;
       min?: number;
       variant: 'input';
-    }
-  | {
-      kind: 'number';
-      options: { [K in TValue]: string };
-      variant: 'radio' | 'select';
     }
 >;
 
