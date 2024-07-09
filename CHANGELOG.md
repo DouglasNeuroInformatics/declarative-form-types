@@ -1,5 +1,21 @@
 Changelog
 
+## [0.9.0](https://github.com/DouglasNeuroInformatics/libui-form-types/compare/v0.8.0...v0.9.0) (2024-07-09)
+
+
+### Features
+
+* add calculateStrength option to password variant ([9ba22e1](https://github.com/DouglasNeuroInformatics/libui-form-types/commit/9ba22e15208b1506b1e34a6d2954e886713ea86f))
+
+
+
+# [0.9.0](https://github.com/DouglasNeuroInformatics/libui-form-types/compare/v0.8.0...v0.9.0) (2024-07-09)
+
+
+### Features
+
+* add calculateStrength option to password variant ([9ba22e1](https://github.com/DouglasNeuroInformatics/libui-form-types/commit/9ba22e15208b1506b1e34a6d2954e886713ea86f))
+
 ## 0.8.0 (2024-06-23)
 
 ### Features
