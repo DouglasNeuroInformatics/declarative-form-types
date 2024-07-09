@@ -89,7 +89,7 @@ export type FormFieldMixin<TField extends { kind: StaticFieldKind }> = Simplify<
 
 export type StringFormField<TValue extends string = string> = FormFieldMixin<
   | {
-      calculateStrength?: (password: string) => IntRange<0, 5>;
+      calculateStrength?: (this: void, password: string) => IntRange<0, 5>;
       kind: 'string';
       variant: 'password';
     }
