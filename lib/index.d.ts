@@ -1,4 +1,4 @@
-import type { Simplify } from 'type-fest';
+import type { IntRange, Simplify } from 'type-fest';
 
 // INTERNAL UTILITIES
 
@@ -89,13 +89,18 @@ export type FormFieldMixin<TField extends { kind: StaticFieldKind }> = Simplify<
 
 export type StringFormField<TValue extends string = string> = FormFieldMixin<
   | {
+      calculateStrength?: (password: string) => IntRange<0, 5>;
+      kind: 'string';
+      variant: 'password';
+    }
+  | {
       kind: 'string';
       options: { [K in TValue]: string };
       variant: 'radio' | 'select';
     }
   | {
       kind: 'string';
-      variant: 'input' | 'password' | 'textarea';
+      variant: 'input' | 'textarea';
     }
 >;
 
