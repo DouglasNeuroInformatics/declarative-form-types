@@ -1,7 +1,7 @@
 {
   "name": "@douglasneuroinformatics/libui-form-types",
   "type": "module",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "packageManager": "pnpm@9.3.0",
   "description": "Type declarations for the declarative form component in libui",
   "author": {

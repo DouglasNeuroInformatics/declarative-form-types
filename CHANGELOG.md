@@ -1,5 +1,21 @@
 Changelog
 
+## [0.9.1](https://github.com/DouglasNeuroInformatics/libui-form-types/compare/v0.9.0...v0.9.1) (2024-07-09)
+
+
+### Bug Fixes
+
+* set this as void in calculate strength ([38db7ec](https://github.com/DouglasNeuroInformatics/libui-form-types/commit/38db7ec0e0b39d7b267438679cc8d31ea900d2d8))
+
+
+
+## [0.9.1](https://github.com/DouglasNeuroInformatics/libui-form-types/compare/v0.9.0...v0.9.1) (2024-07-09)
+
+
+### Bug Fixes
+
+* set this as void in calculate strength ([38db7ec](https://github.com/DouglasNeuroInformatics/libui-form-types/commit/38db7ec0e0b39d7b267438679cc8d31ea900d2d8))
+
 ## [0.9.0](https://github.com/DouglasNeuroInformatics/libui-form-types/compare/v0.8.0...v0.9.0) (2024-07-09)
 
 
