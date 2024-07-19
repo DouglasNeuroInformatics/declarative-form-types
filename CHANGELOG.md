@@ -1,3 +1,12 @@
+# Changelog
+
+## [0.9.2](https://github.com/DouglasNeuroInformatics/libui-form-types/compare/v0.9.1...v0.9.2) (2024-07-19)
+
+
+### Bug Fixes
+
+* standardize config and release workflow ([f72a88f](https://github.com/DouglasNeuroInformatics/libui-form-types/commit/f72a88f15dc098818b32f6e906152d30b543b7ea))
+
 Changelog
 
 ## [0.9.1](https://github.com/DouglasNeuroInformatics/libui-form-types/compare/v0.9.0...v0.9.1) (2024-07-09)
