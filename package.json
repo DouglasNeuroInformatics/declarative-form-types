@@ -4,15 +4,12 @@
   "version": "0.9.1",
   "packageManager": "pnpm@9.3.0",
   "description": "Type declarations for a declarative form system",
-  "author": {
-    "name": "Douglas Neuroinformatics",
-    "email": "support@douglasneuroinformatics.ca"
-  },
+  "author": "Joshua Unrau",
   "license": "Apache-2.0",
-  "homepage": "https://github.com/DouglasNeuroInformatics/libui-form-types/#readme",
+  "homepage": "https://github.com/DouglasNeuroInformatics/libui-form-types#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/DouglasNeuroInformatics/libui-form-types/.git"
+    "url": "https://github.com/DouglasNeuroInformatics/libui-form-types.git"
   },
   "bugs": {
     "url": "https://github.com/DouglasNeuroInformatics/libui-form-types/issues"
@@ -34,11 +31,10 @@
   "devDependencies": {
     "@commitlint/cli": "^19.3.0",
     "@commitlint/config-conventional": "^19.2.2",
-    "@commitlint/types": "^19.0.3",
     "@douglasneuroinformatics/eslint-config": "^4.2.2",
-    "@semantic-release/changelog": "^6.0.3",
-    "@semantic-release/git": "^10.0.1",
-    "@semantic-release/npm": "^12.0.1",
+    "@douglasneuroinformatics/prettier-config": "^0.0.1",
+    "@douglasneuroinformatics/semantic-release": "^0.0.1",
+    "@douglasneuroinformatics/tsconfig": "^1.0.1",
     "@types/lodash": "^4.17.5",
     "concurrently": "^8.2.2",
     "eslint": "^8.57.0",
@@ -47,8 +43,18 @@
     "husky": "^9.0.11",
     "lodash": "^4.17.21",
     "prettier": "^3.3.2",
-    "semantic-release": "^23.0.8",
     "typedoc": "^0.26.1",
-    "typescript": "~5.3.3"
+    "typescript": "~5.5.3"
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "prettier": "@douglasneuroinformatics/prettier-config",
+  "release": {
+    "extends": [
+      "@douglasneuroinformatics/semantic-release"
+    ]
   }
 }
