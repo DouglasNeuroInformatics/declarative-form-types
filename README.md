@@ -5,7 +5,7 @@
   </a>
   <h3 align="center">@douglasneuroinformatics/libui-form-types</h3>
   <p align="center">
-    Type declarations for a libui form 
+    Type declarations for a declarative form system
     <br />
     <a href="https://douglasneuroinformatics.github.io/libui-form-types/">
       <strong>Explore the docs »
