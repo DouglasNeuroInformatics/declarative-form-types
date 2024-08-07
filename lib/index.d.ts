@@ -100,6 +100,7 @@ export type StringFormField<TValue extends string = string> = FormFieldMixin<
     }
   | {
       kind: 'string';
+      placeholder?: string;
       variant: 'input' | 'textarea';
     }
 >;
