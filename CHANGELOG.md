@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.10.0](https://github.com/DouglasNeuroInformatics/libui-form-types/compare/v0.9.2...v0.10.0) (2024-08-07)
+
+
+### Features
+
+* add placeholder option to StringFormField ([1231a0b](https://github.com/DouglasNeuroInformatics/libui-form-types/commit/1231a0b1a92ff821242be810fb60f0204f211dde))
+
 ## [0.9.2](https://github.com/DouglasNeuroInformatics/libui-form-types/compare/v0.9.1...v0.9.2) (2024-07-19)
 
 
