@@ -114,15 +114,17 @@ export type NumberFormField<TValue extends number = number> = FormFieldMixin<
     }
   | {
       kind: 'number';
-      max: number;
-      min: number;
-      variant: 'slider';
+      /** @deprecated - this should be defined in the validationSchema for better use feedback  */
+      max?: number;
+      /** @deprecated - this should be defined in the validationSchema for better use feedback  */
+      min?: number;
+      variant: 'input';
     }
   | {
       kind: 'number';
-      max?: number;
-      min?: number;
-      variant: 'input';
+      max: number;
+      min: number;
+      variant: 'slider';
     }
 >;
 
