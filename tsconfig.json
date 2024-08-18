@@ -1,4 +1,7 @@
 {
   "extends": ["@douglasneuroinformatics/tsconfig"],
+  "compilerOptions": {
+    "skipLibCheck": false
+  },
   "include": ["lib/**/*"]
 }
