@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.10.2](https://github.com/DouglasNeuroInformatics/libui-form-types/compare/v0.10.1...v0.10.2) (2024-08-18)
+
+
+### Bug Fixes
+
+* provide default export of namespace ([43284ea](https://github.com/DouglasNeuroInformatics/libui-form-types/commit/43284ea2ddb0e9b3a58a4670782b1806f61d18ac))
+
 ## [0.10.1](https://github.com/DouglasNeuroInformatics/libui-form-types/compare/v0.10.0...v0.10.1) (2024-08-15)
 
 
