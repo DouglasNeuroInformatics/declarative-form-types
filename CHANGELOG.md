@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.10.1](https://github.com/DouglasNeuroInformatics/libui-form-types/compare/v0.10.0...v0.10.1) (2024-08-15)
+
+
+### Bug Fixes
+
+* deprecate min and max values in number input ([d51a940](https://github.com/DouglasNeuroInformatics/libui-form-types/commit/d51a940e9c8e8b886ae70b541909b742f97f868d))
+
 ## [0.10.0](https://github.com/DouglasNeuroInformatics/libui-form-types/compare/v0.9.2...v0.10.0) (2024-08-07)
 
 
