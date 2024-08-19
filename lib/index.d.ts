@@ -3,7 +3,6 @@ import type { IntRange, Simplify } from 'type-fest';
 /** @public */
 declare namespace FormTypes {
   // INTERNAL UTILITIES
-
   export type NonNullableRecord<T> =
     NonNullable<T> extends infer U extends { [key: string]: unknown }
       ? {
@@ -31,24 +30,24 @@ declare namespace FormTypes {
 
   export type CompositeFieldValue = NumberRecordFieldValue | RecordArrayFieldValue;
 
-  export type FormFieldValue = CompositeFieldValue | ScalarFieldValue;
+  export type FieldValue = CompositeFieldValue | ScalarFieldValue;
 
   /** The type of the data associated with the entire instrument (i.e., the values for all fields) */
-  export type FormDataType = { [key: string]: FormFieldValue };
+  export type Data = { [key: string]: FieldValue };
 
   // REQUIRED DATA TYPES
 
-  export type RequiredFieldValue<TValue extends FormFieldValue = FormFieldValue> =
-    TValue extends infer TScalarValue extends NonNullable<ScalarFieldValue>
-      ? TScalarValue
-      : TValue extends infer TCompositeValue extends NonNullable<CompositeFieldValue>
-        ? TCompositeValue extends (infer TArrayItem)[]
-          ? NonNullableRecord<TArrayItem>[]
-          : NonNullableRecord<TCompositeValue>
-        : never;
+  export type RequiredFieldValue<TValue extends FieldValue = FieldValue> = TValue extends infer TScalarValue extends
+    NonNullable<ScalarFieldValue>
+    ? TScalarValue
+    : TValue extends infer TCompositeValue extends NonNullable<CompositeFieldValue>
+      ? TCompositeValue extends (infer TArrayItem)[]
+        ? NonNullableRecord<TArrayItem>[]
+        : NonNullableRecord<TCompositeValue>
+      : never;
 
   export type OptionalFieldValue<
-    TValue extends FormFieldValue = FormFieldValue,
+    TValue extends FieldValue = FieldValue,
     TNull extends null = never
   > = TValue extends infer TScalarValue extends NonNullable<ScalarFieldValue>
     ? TNull | TScalarValue | undefined
@@ -58,20 +57,20 @@ declare namespace FormTypes {
         : Partial<TCompositeValue> | TNull | undefined
       : never;
 
-  export type RequiredFormDataType<TData extends FormDataType = FormDataType> = {
+  export type RequiredData<TData extends Data = Data> = {
     [K in keyof TData]-?: RequiredFieldValue<TData[K]>;
   };
 
-  export type PartialFormDataType<TData extends FormDataType = FormDataType> = {
+  export type PartialData<TData extends Data = Data> = {
     [K in keyof TData]?: OptionalFieldValue<TData[K]>;
   };
 
-  export type PartialNullableFormDataType<TData extends FormDataType = FormDataType> = {
+  export type PartialNullableData<TData extends Data = Data> = {
     [K in keyof TData]?: OptionalFieldValue<TData[K], null>;
   };
 
   /** The basic properties common to all field kinds */
-  export type BaseFormField = {
+  export type BaseField = {
     /** An optional description of this field */
     description?: string;
 
@@ -83,13 +82,13 @@ declare namespace FormTypes {
   };
 
   /**
-   * A helper type used to merge `BaseFormField` with `T`, where kind determines
+   * A helper type used to merge `BaseField` with `T`, where kind determines
    * the data type stored in the form and variant determines what will be rendered
    * to the user, if applicable
    */
-  export type FormFieldMixin<TField extends { kind: StaticFieldKind }> = Simplify<BaseFormField & TField>;
+  export type FieldMixin<TField extends { kind: StaticFieldKind }> = Simplify<BaseField & TField>;
 
-  export type StringFormField<TValue extends string = string> = FormFieldMixin<
+  export type StringField<TValue extends string = string> = FieldMixin<
     | {
         calculateStrength?: (this: void, password: string) => IntRange<0, 5>;
         kind: 'string';
@@ -107,7 +106,7 @@ declare namespace FormTypes {
       }
   >;
 
-  export type NumberFormField<TValue extends number = number> = FormFieldMixin<
+  export type NumberField<TValue extends number = number> = FieldMixin<
     | {
         disableAutoPrefix?: boolean;
         kind: 'number';
@@ -130,11 +129,11 @@ declare namespace FormTypes {
       }
   >;
 
-  export type DateFormField = FormFieldMixin<{
+  export type DateField = FieldMixin<{
     kind: 'date';
   }>;
 
-  export type BooleanFormField = FormFieldMixin<
+  export type BooleanField = FieldMixin<
     | {
         kind: 'boolean';
         options?: {
@@ -149,7 +148,7 @@ declare namespace FormTypes {
       }
   >;
 
-  export type SetFormField<TValue extends Set<string> = Set<string>> = FormFieldMixin<{
+  export type SetField<TValue extends Set<string> = Set<string>> = FieldMixin<{
     kind: 'set';
     options: TValue extends Set<infer TItem extends string>
       ? {
@@ -159,49 +158,48 @@ declare namespace FormTypes {
     variant: 'listbox' | 'select';
   }>;
 
-  export type AnyScalarFormField = BooleanFormField | DateFormField | NumberFormField | SetFormField | StringFormField;
+  export type AnyScalarField = BooleanField | DateField | NumberField | SetField | StringField;
 
-  /** A field where the underlying value of the field data is of type FormFieldValue */
-  export type ScalarFormField<
-    TValue extends RequiredFieldValue<ScalarFieldValue> = RequiredFieldValue<ScalarFieldValue>
-  > = [TValue] extends [object]
-    ? [TValue] extends [Date]
-      ? DateFormField
-      : [TValue] extends [Set<string>]
-        ? SetFormField<TValue>
-        : never
-    : [TValue] extends [string]
-      ? StringFormField<TValue>
-      : [TValue] extends [number]
-        ? NumberFormField<TValue>
-        : [TValue] extends [boolean]
-          ? BooleanFormField
-          : AnyScalarFormField;
+  /** A field where the underlying value of the field data is of type ScalarFieldValue */
+  export type ScalarField<TValue extends RequiredFieldValue<ScalarFieldValue> = RequiredFieldValue<ScalarFieldValue>> =
+    [TValue] extends [object]
+      ? [TValue] extends [Date]
+        ? DateField
+        : [TValue] extends [Set<string>]
+          ? SetField<TValue>
+          : never
+      : [TValue] extends [string]
+        ? StringField<TValue>
+        : [TValue] extends [number]
+          ? NumberField<TValue>
+          : [TValue] extends [boolean]
+            ? BooleanField
+            : AnyScalarField;
 
   export type DynamicFieldsetField<
     TFieldsetValue extends FieldsetValue,
     TValue extends RequiredFieldValue<ScalarFieldValue>
   > = {
     kind: 'dynamic';
-    render: (this: void, fieldset: Partial<TFieldsetValue>) => ScalarFormField<TValue> | null;
+    render: (this: void, fieldset: Partial<TFieldsetValue>) => ScalarField<TValue> | null;
   };
 
   export type Fieldset<TFieldsetValue extends NonNullableRecord<FieldsetValue>> = {
     [K in keyof TFieldsetValue]:
       | DynamicFieldsetField<TFieldsetValue, TFieldsetValue[K]>
-      | ScalarFormField<TFieldsetValue[K]>;
+      | ScalarField<TFieldsetValue[K]>;
   };
 
-  export type RecordArrayFormField<
+  export type RecordArrayField<
     TValue extends RequiredFieldValue<RecordArrayFieldValue> = RequiredFieldValue<RecordArrayFieldValue>
-  > = FormFieldMixin<{
+  > = FieldMixin<{
     fieldset: Fieldset<TValue[number]>;
     kind: 'record-array';
   }>;
 
-  export type NumberRecordFormField<
+  export type NumberRecordField<
     TValue extends RequiredFieldValue<NumberRecordFieldValue> = RequiredFieldValue<NumberRecordFieldValue>
-  > = FormFieldMixin<{
+  > = FieldMixin<{
     items: {
       [K in keyof TValue]: {
         description?: string;
@@ -213,66 +211,63 @@ declare namespace FormTypes {
     variant: 'likert';
   }>;
 
-  export type CompositeFormField<TValue extends RequiredFieldValue<CompositeFieldValue>> =
+  export type CompositeField<TValue extends RequiredFieldValue<CompositeFieldValue>> =
     TValue extends RequiredFieldValue<RecordArrayFieldValue>
-      ? RecordArrayFormField<TValue>
+      ? RecordArrayField<TValue>
       : TValue extends RequiredFieldValue<NumberRecordFieldValue>
-        ? NumberRecordFormField<TValue>
+        ? NumberRecordField<TValue>
         : never;
 
-  export type AnyStaticFormField =
-    | BooleanFormField
-    | DateFormField
-    | NumberFormField
-    | NumberRecordFormField
-    | RecordArrayFormField
-    | SetFormField
-    | StringFormField;
+  export type AnyStaticField =
+    | BooleanField
+    | DateField
+    | NumberField
+    | NumberRecordField
+    | RecordArrayField
+    | SetField
+    | StringField;
 
-  export type StaticFormField<TValue extends RequiredFieldValue = RequiredFieldValue> = [TValue] extends [
+  export type StaticField<TValue extends RequiredFieldValue = RequiredFieldValue> = [TValue] extends [
     RequiredFieldValue<ScalarFieldValue>
   ]
-    ? ScalarFormField<TValue>
+    ? ScalarField<TValue>
     : [TValue] extends [RequiredFieldValue<CompositeFieldValue>]
       ? [TValue] extends [RequiredFieldValue<RecordArrayFieldValue>]
-        ? RecordArrayFormField<TValue>
+        ? RecordArrayField<TValue>
         : [TValue] extends [RequiredFieldValue<NumberRecordFieldValue>]
-          ? NumberRecordFormField<TValue>
+          ? NumberRecordField<TValue>
           : never
-      : AnyStaticFormField;
+      : AnyStaticField;
 
-  export type StaticFormFields<
-    TData extends FormDataType,
-    TRequiredData extends RequiredFormDataType<TData> = RequiredFormDataType<TData>
-  > = {
-    [K in keyof TRequiredData]: StaticFormField<TRequiredData[K]>;
+  export type StaticFields<TData extends Data, TRequiredData extends RequiredData<TData> = RequiredData<TData>> = {
+    [K in keyof TRequiredData]: StaticField<TRequiredData[K]>;
   };
 
-  export type DynamicFormField<TData extends FormDataType, TValue extends RequiredFieldValue = RequiredFieldValue> = {
+  export type DynamicField<TData extends Data, TValue extends RequiredFieldValue = RequiredFieldValue> = {
     deps: readonly Extract<keyof TData, string>[];
     kind: 'dynamic';
-    render: (this: void, data: PartialFormDataType<TData>) => StaticFormField<TValue> | null;
+    render: (this: void, data: PartialData<TData>) => StaticField<TValue> | null;
   };
 
-  export type UnknownFormField<
-    TData extends FormDataType = FormDataType,
+  export type UnknownField<
+    TData extends Data = Data,
     TKey extends keyof TData = keyof TData,
-    TRequiredData extends RequiredFormDataType<TData> = RequiredFormDataType<TData>
-  > = DynamicFormField<TData, TRequiredData[TKey]> | StaticFormField<TRequiredData[TKey]>;
+    TRequiredData extends RequiredData<TData> = RequiredData<TData>
+  > = DynamicField<TData, TRequiredData[TKey]> | StaticField<TRequiredData[TKey]>;
 
-  export type FormFields<TData extends FormDataType = FormDataType> = {
-    [K in keyof TData]-?: UnknownFormField<TData, K>;
+  export type Fields<TData extends Data = Data> = {
+    [K in keyof TData]-?: UnknownField<TData, K>;
   };
 
-  export type FormFieldsGroup<TData extends FormDataType> = {
+  export type FieldsGroup<TData extends Data> = {
     description?: string;
     fields: {
-      [K in keyof TData]?: UnknownFormField<RequiredFormDataType<TData>, K>;
+      [K in keyof TData]?: UnknownField<RequiredData<TData>, K>;
     };
     title?: string;
   };
 
-  export type FormContent<TData extends FormDataType = FormDataType> = FormFields<TData> | FormFieldsGroup<TData>[];
+  export type Content<TData extends Data = Data> = Fields<TData> | FieldsGroup<TData>[];
 }
 
 export import NonNullableRecord = FormTypes.NonNullableRecord;
@@ -284,34 +279,34 @@ export import FieldsetValue = FormTypes.FieldsetValue;
 export import RecordArrayFieldValue = FormTypes.RecordArrayFieldValue;
 export import NumberRecordFieldValue = FormTypes.NumberRecordFieldValue;
 export import CompositeFieldValue = FormTypes.CompositeFieldValue;
-export import FormFieldValue = FormTypes.FormFieldValue;
-export import FormDataType = FormTypes.FormDataType;
+export import FormFieldValue = FormTypes.FieldValue;
+export import FormDataType = FormTypes.Data;
 export import RequiredFieldValue = FormTypes.RequiredFieldValue;
 export import OptionalFieldValue = FormTypes.OptionalFieldValue;
-export import RequiredFormDataType = FormTypes.RequiredFormDataType;
-export import PartialFormDataType = FormTypes.PartialFormDataType;
-export import PartialNullableFormDataType = FormTypes.PartialNullableFormDataType;
-export import BaseFormField = FormTypes.BaseFormField;
-export import FormFieldMixin = FormTypes.FormFieldMixin;
-export import StringFormField = FormTypes.StringFormField;
-export import NumberFormField = FormTypes.NumberFormField;
-export import DateFormField = FormTypes.DateFormField;
-export import BooleanFormField = FormTypes.BooleanFormField;
-export import SetFormField = FormTypes.SetFormField;
-export import AnyScalarFormField = FormTypes.AnyScalarFormField;
-export import ScalarFormField = FormTypes.ScalarFormField;
+export import RequiredFormDataType = FormTypes.RequiredData;
+export import PartialFormDataType = FormTypes.PartialData;
+export import PartialNullableFormDataType = FormTypes.PartialNullableData;
+export import BaseFormField = FormTypes.BaseField;
+export import FormFieldMixin = FormTypes.FieldMixin;
+export import StringFormField = FormTypes.StringField;
+export import NumberFormField = FormTypes.NumberField;
+export import DateFormField = FormTypes.DateField;
+export import BooleanFormField = FormTypes.BooleanField;
+export import SetFormField = FormTypes.SetField;
+export import AnyScalarFormField = FormTypes.AnyScalarField;
+export import ScalarFormField = FormTypes.ScalarField;
 export import DynamicFieldsetField = FormTypes.DynamicFieldsetField;
 export import Fieldset = FormTypes.Fieldset;
-export import RecordArrayFormField = FormTypes.RecordArrayFormField;
-export import NumberRecordFormField = FormTypes.NumberRecordFormField;
-export import CompositeFormField = FormTypes.CompositeFormField;
-export import AnyStaticFormField = FormTypes.AnyStaticFormField;
-export import StaticFormField = FormTypes.StaticFormField;
-export import StaticFormFields = FormTypes.StaticFormFields;
-export import DynamicFormField = FormTypes.DynamicFormField;
-export import UnknownFormField = FormTypes.UnknownFormField;
-export import FormFields = FormTypes.FormFields;
-export import FormFieldsGroup = FormTypes.FormFieldsGroup;
-export import FormContent = FormTypes.FormContent;
+export import RecordArrayFormField = FormTypes.RecordArrayField;
+export import NumberRecordFormField = FormTypes.NumberRecordField;
+export import CompositeFormField = FormTypes.CompositeField;
+export import AnyStaticFormField = FormTypes.AnyStaticField;
+export import StaticFormField = FormTypes.StaticField;
+export import StaticFormFields = FormTypes.StaticFields;
+export import DynamicFormField = FormTypes.DynamicField;
+export import UnknownFormField = FormTypes.UnknownField;
+export import FormFields = FormTypes.Fields;
+export import FormFieldsGroup = FormTypes.FieldsGroup;
+export import FormContent = FormTypes.Content;
 
 export default FormTypes;
