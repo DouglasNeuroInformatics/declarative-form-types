@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.10.3](https://github.com/DouglasNeuroInformatics/libui-form-types/compare/v0.10.2...v0.10.3) (2024-08-19)
+
+
+### Bug Fixes
+
+* simplify namespaced names ([7b8afd6](https://github.com/DouglasNeuroInformatics/libui-form-types/commit/7b8afd6e7a8c3993b4e8cece3c57cf9768369059))
+
 ## [0.10.2](https://github.com/DouglasNeuroInformatics/libui-form-types/compare/v0.10.1...v0.10.2) (2024-08-18)
 
 
