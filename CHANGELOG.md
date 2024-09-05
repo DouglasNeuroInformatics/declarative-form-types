@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.11.0](https://github.com/DouglasNeuroInformatics/libui-form-types/compare/v0.10.3...v0.11.0) (2024-09-05)
+
+
+### Features
+
+* add disabled option to form ([3e31005](https://github.com/DouglasNeuroInformatics/libui-form-types/commit/3e31005f57665fccac4c1e7603578ec8b4a21123))
+
 ## [0.10.3](https://github.com/DouglasNeuroInformatics/libui-form-types/compare/v0.10.2...v0.10.3) (2024-08-19)
 
 
