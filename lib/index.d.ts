@@ -74,6 +74,9 @@ declare namespace FormTypes {
     /** An optional description of this field */
     description?: string;
 
+    /** Whether or not the field is disabled */
+    disabled?: boolean;
+
     /** Discriminator key */
     kind: StaticFieldKind;
 
